@@ -4,12 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Models\Quiz;
 use Mediconesystems\LivewireDatatables\Column;
-use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
-class QuizzesTable extends LivewireDatatable
+class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
+
+    public Quiz $editing;
 
     public function builder()
     {
@@ -24,7 +25,6 @@ class QuizzesTable extends LivewireDatatable
 
     public function columns()
     {
-
         return [
             NumberColumn::name('id')->label('ID'),
             Column::name('title'),

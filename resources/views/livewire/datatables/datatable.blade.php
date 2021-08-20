@@ -171,3 +171,39 @@
     </div>
     @endif
 </div>
+
+<!-- Delete Transactions Modal -->
+<form wire:submit.prevent="deleteSelected">
+    <x-modal.confirmation wire:model.defer="showDeleteModal">
+        <x-slot name="title">Delete Transaction</x-slot>
+
+        <x-slot name="content">
+            <div class="py-8 text-cool-gray-700">Are you sure you? This action is irreversible.</div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('showDeleteModal', false)">Cancel</x-jet-secondary-button>
+
+            <x-jet-button type="submit">Delete</x-jet-button>
+        </x-slot>
+    </x-modal.confirmation>
+</form>
+
+<!-- Save Transaction Modal -->
+<form wire:submit.prevent="save">
+    <x-modal.dialog wire:model.defer="showEditModal">
+        <x-slot name="title">Edit</x-slot>
+
+        <x-slot name="content">
+            <x-input.group for="title" label="Title" :error="$errors->first('editing.title')">
+                <x-input.text wire:model="editing.title" id="title" placeholder="Title" />
+            </x-input.group>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('showEditModal', false)">Cancel</x-jet-secondary-button>
+
+            <x-jet-button type="submit">Save</x-jet-button>
+        </x-slot>
+    </x-modal.dialog>
+</form>
