@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Question;
+use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\User::factory(10)->create();
-         \App\Models\Quiz::factory(30)->create();
+         User::factory(1)->create();
+         Quiz::factory(3)->create(['owner' => 1]);
+         Question::factory(30)->create();
     }
 }

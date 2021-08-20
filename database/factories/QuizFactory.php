@@ -23,9 +23,9 @@ class QuizFactory extends Factory
     public function definition()
     {
         return [
+            'owner' => User::all()->random()->id,
             'title' => $this->faker->colorName,
             'description' => $this->faker->text(),
-            'owner' => User::all()->random()->id
         ];
     }
 }
