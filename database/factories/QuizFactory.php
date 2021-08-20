@@ -24,7 +24,7 @@ class QuizFactory extends Factory
     {
         return [
             'title' => $this->faker->colorName,
-            'description' => $this->faker->text(60),
+            'description' => $this->faker->text(),
             'owner' => User::all()->random()->id
         ];
     }
