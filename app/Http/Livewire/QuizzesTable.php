@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Quiz;
+use Illuminate\Database\Eloquent\Model;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
@@ -10,11 +11,11 @@ class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
 
-    public Quiz $editing;
+    public ?Model $editing;
 
     public function builder()
     {
-        $builder = Quiz::query()
+        $builder = $this->model::query()
             ->leftJoin('questions', 'quizzes.id', 'questions.quiz_id')
 //            ->leftJoin('slots', 'questions.slot_id', 'slots.id')
             ->whereOwner(auth()->id())
@@ -33,5 +34,20 @@ class QuizzesTable extends AbstractDataTable
 
             Column::delete(),
         ];
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->editing = Quiz::findOrFail($id);
+
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteConfirmed()
+    {
+        parent::delete($this->editing->id);
+
+        $this->editing = null;
+        $this->showDeleteModal = false;
     }
 }

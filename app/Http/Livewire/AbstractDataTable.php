@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Database\Eloquent\Model;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class AbstractDataTable extends LivewireDatatable
 {
     public bool $showEditModal;
     public bool $showDeleteModal;
+
+    public ?Model $editing;
 
     public function create()
     {
@@ -20,7 +23,7 @@ class AbstractDataTable extends LivewireDatatable
 
     public function edit($model)
     {
-        $this->useCachedRows();
+//        $this->useCachedRows();
 
         if ($this->editing->isNot($model)) {
             $this->editing = $model;
