@@ -11,6 +11,8 @@ class QuizzesTable extends LivewireDatatable
 {
     public $model = Quiz::class;
 
+    public $displayingDelete;
+
     public function builder()
     {
         return $this->model::query()->whereOwner(auth()->id());
@@ -24,5 +26,17 @@ class QuizzesTable extends LivewireDatatable
             Column::name('description')->truncate(50),
             Column::delete(),
         ];
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->displayingDelete[$id] = true;
+    }
+
+    public function delete($id)
+    {
+        parent::delete($id);
+
+        $this->displayingDelete[$id] = false;
     }
 }
