@@ -13,7 +13,7 @@ class QuizzesTable extends LivewireDatatable
 
     public function builder()
     {
-        return Quiz::query()->whereOwner(auth()->id());
+        return $this->model::query()->whereOwner(auth()->id());
     }
 
     public function columns()
