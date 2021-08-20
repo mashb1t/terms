@@ -173,7 +173,7 @@
 
     <x-jet-dialog-modal wire:model="showDeleteModal">
         <x-slot name="title">
-            {{ __('Delete ') }} {{ $editing->title ?? null }}
+            {{ __('Delete ') }} "{{ $editing->title ?? null }}"
         </x-slot>
 
         <x-slot name="content">
@@ -193,12 +193,10 @@
 
     <form wire:submit.prevent="save">
         <x-modal.dialog wire:model.defer="showEditModal">
-            <x-slot name="title">Edit</x-slot>
+            <x-slot name="title">{{ __('Edit') }} "{{ $editing->title ?? null }}"</x-slot>
 
             <x-slot name="content">
-                <x-input.group for="title" label="Title" :error="$errors->first('editing.title')">
-                    <x-input.text wire:model="editing.title" id="title" placeholder="Title" />
-                </x-input.group>
+                {!! $edit_fields !!}
             </x-slot>
 
             <x-slot name="footer">

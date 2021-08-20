@@ -7,8 +7,9 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class AbstractDataTable extends LivewireDatatable
 {
-    public bool $showEditModal;
-    public bool $showDeleteModal;
+    public bool $showEditModal = false;
+
+    public bool $showDeleteModal = false;
 
     public ?Model $editing;
 
@@ -21,13 +22,9 @@ class AbstractDataTable extends LivewireDatatable
         $this->showEditModal = true;
     }
 
-    public function edit($model)
+    public function edit($id)
     {
-//        $this->useCachedRows();
-
-        if ($this->editing->isNot($model)) {
-            $this->editing = $model;
-        }
+        $this->editing = $this->model::findOrFail($id);
 
         $this->showEditModal = true;
     }
@@ -37,5 +34,29 @@ class AbstractDataTable extends LivewireDatatable
         $this->validate();
         $this->editing->save();
         $this->showEditModal = false;
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->editing = $this->model::findOrFail($id);
+
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteConfirmed()
+    {
+        parent::delete($this->editing->id);
+
+        $this->editing = null;
+        $this->showDeleteModal = false;
+    }
+
+    public function render()
+    {
+        $this->emit('refreshDynamic');
+
+        return view('datatables::datatable', [
+            'edit_fields' => view('datatables.quiz.modals.edit'),
+        ]);
     }
 }
