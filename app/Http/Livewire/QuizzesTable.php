@@ -11,7 +11,7 @@ class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
     public ?Model $editing;
-
+    public bool $showCreateButton = true;
     protected $route = 'quiz';
 
     public function rules()
@@ -25,7 +25,7 @@ class QuizzesTable extends AbstractDataTable
     public function builder()
     {
         $builder = $this->model::query()
-            ->join('questions', 'quizzes.id', 'questions.quiz_id')
+            ->leftJoin('questions', 'quizzes.id', 'questions.quiz_id')
 //            ->leftJoin('slots', 'questions.slot_id', 'slots.id')
             ->whereOwner(auth()->id())
             ->groupBy('quizzes.id');
@@ -54,5 +54,13 @@ class QuizzesTable extends AbstractDataTable
                 ]);
             })->label('Actions'),
         ];
+    }
+
+    public function save()
+    {
+        $this->validate();
+        $this->editing->owner = $this->editing->owner ?? auth()->id();
+        $this->editing->save();
+        $this->showEditModal = false;
     }
 }

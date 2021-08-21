@@ -8,9 +8,9 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 class AbstractDataTable extends LivewireDatatable
 {
     public bool $showEditModal = false;
-
     public bool $showDeleteModal = false;
-
+    public bool $showCreateButton = true;
+    
     public ?Model $editing;
 
     public function create()
@@ -22,10 +22,9 @@ class AbstractDataTable extends LivewireDatatable
         $this->showEditModal = true;
     }
 
-    public function edit($id)
+    public function edit(?int $id = null)
     {
-        $this->editing = $this->model::findOrFail($id);
-
+        $this->editing = $this->model::findOrNew($id);
         $this->showEditModal = true;
     }
 

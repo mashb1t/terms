@@ -4,6 +4,11 @@
             @include($beforeTableSlot)
         </div>
     @endif
+    @if($showCreateButton)
+        <x-jet-button class="ml-2" wire:click="edit()" wire:loading.attr="disabled">
+            {{ __('Create') }}
+        </x-jet-button>
+    @endif
     <div class="relative">
         <div class="flex justify-between items-center mb-1">
             <div class="flex-grow h-10 flex items-center">
@@ -193,7 +198,12 @@
 
     <form wire:submit.prevent="save">
         <x-modal.dialog wire:model.defer="showEditModal">
-            <x-slot name="title">{{ __('Edit') }} "{{ $editing->title ?? null }}"</x-slot>
+            <x-slot name="title"> @if(isset($editing->id))
+                    {{ __('Edit') }} "{{ $editing->title ?? null }}"
+                @else
+                    {{ __('Create') }}
+                @endif
+            </x-slot>
 
             <x-slot name="content">
                 {!! $edit_fields !!}
