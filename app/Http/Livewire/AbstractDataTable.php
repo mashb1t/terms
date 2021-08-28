@@ -10,7 +10,7 @@ class AbstractDataTable extends LivewireDatatable
     public bool $showEditModal = false;
     public bool $showDeleteModal = false;
     public bool $showCreateButton = true;
-    
+
     public ?Model $editing;
 
     public function create()
@@ -48,14 +48,5 @@ class AbstractDataTable extends LivewireDatatable
 
         $this->editing = null;
         $this->showDeleteModal = false;
-    }
-
-    public function render()
-    {
-        $this->emit('refreshDynamic');
-
-        return view('datatables::datatable', [
-            'edit_fields' => view('datatables.quiz.modals.edit'),
-        ]);
     }
 }

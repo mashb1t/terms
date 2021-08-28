@@ -62,4 +62,13 @@ class QuizzesTable extends AbstractDataTable
         $this->editing->save();
         $this->showEditModal = false;
     }
+
+    public function render()
+    {
+        $this->emit('refreshDynamic');
+
+        return view('datatables::datatable', [
+            'edit_fields' => view('datatables.quizzes.modals.edit'),
+        ]);
+    }
 }
