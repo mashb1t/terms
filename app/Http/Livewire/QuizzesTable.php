@@ -10,9 +10,10 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
+
     public ?Model $editing;
+
     public bool $showCreateButton = true;
-    protected $route = 'quiz';
 
     public function rules()
     {
@@ -45,9 +46,7 @@ class QuizzesTable extends AbstractDataTable
                 return view('datatables.table-actions', [
                     'id' => $id,
                     'name' => $name,
-                    'route' => $this->route,
                     'actions' => [
-                        'view' => false,
                         'edit' => true,
                         'delete' => true,
                     ],
