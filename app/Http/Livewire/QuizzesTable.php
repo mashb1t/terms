@@ -40,12 +40,13 @@ class QuizzesTable extends AbstractDataTable
             NumberColumn::name('id')->label('ID'),
             Column::name('title'),
             Column::name('description')->truncate(50),
-            NumberColumn::name('questions.id')->label(__('# Questions'))->width(150),
+            NumberColumn::name('questions.id')->label(__('# Questions'))->width(170),
 
             Column::callback(['id', 'title'], function ($id, $name) {
                 return view('datatables.table-actions', [
                     'id' => $id,
                     'name' => $name,
+                    'view_route' => route('quiz.view', ['quiz' => $id]),
                     'actions' => [
                         'view' => true,
                         'edit' => true,
