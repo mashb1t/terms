@@ -15,7 +15,7 @@
 </x-input.group>
 
 <x-input.group for="question" label="Question" :error="$errors->first('editing.question')">
-    <x-input.text wire:model="editing.question" id="title" placeholder="Question" />
+    <x-input.textarea wire:model="editing.question" id="title" placeholder="Question" />
 </x-input.group>
 
 <x-input.group for="answer" label="Answer" :error="$errors->first('editing.answer')">
