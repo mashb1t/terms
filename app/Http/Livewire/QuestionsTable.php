@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\CacheHelper;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Slot;
@@ -78,8 +79,8 @@ class QuestionsTable extends AbstractDataTable
     public function edit(?int $id = null)
     {
         $this->editing = Question::findOrNew($id);
-        $this->editing->quiz_id = $this->editing->quiz_id ?? $this->quiz->id ?? $this->getCachedQuizzesCollection()->first()->id ?? null;
-        $this->editing->slot_id = $this->editing->slot_id ?? $this->getCachedSlotsCollection()->first()->id  ?? null;
+        $this->editing->quiz_id = $this->editing->quiz_id ?? $this->quiz->id ?? CacheHelper::getCachedQuizzesCollection()->first()->id ?? null;
+        $this->editing->slot_id = $this->editing->slot_id ?? CacheHelper::getCachedSlotsCollection()->first()->id  ?? null;
         $this->showEditModal = true;
     }
 
@@ -93,19 +94,5 @@ class QuestionsTable extends AbstractDataTable
                 'slots' => $this->getCachedSlotsCollection(),
             ]),
         ]);
-    }
-
-    protected function getCachedSlotsCollection(): Collection
-    {
-        return Cache::rememberForever('slots', function () {
-            return Slot::all();
-        });
-    }
-
-    protected function getCachedQuizzesCollection(): Collection
-    {
-        return Cache::remember('quizzes', 1, function () {
-            return Quiz::whereOwner(auth()->id())->get();
-        });
     }
 }
