@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Quiz;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +21,12 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::view('/quizzes', 'quizzes/list')->name('quizzes');
+
+    Route::get('/quiz/{quiz}', function (Quiz $quiz) {
+        return view('quizzes/view', [
+            'quiz' => $quiz,
+        ]);
+    })->name('quiz.view');
+
     Route::view('/questions', 'questions/list')->name('questions');
 });

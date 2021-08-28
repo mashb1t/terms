@@ -47,6 +47,7 @@ class QuizzesTable extends AbstractDataTable
                     'id' => $id,
                     'name' => $name,
                     'actions' => [
+                        'view' => true,
                         'edit' => true,
                         'delete' => true,
                     ],

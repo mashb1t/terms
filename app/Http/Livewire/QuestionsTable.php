@@ -53,6 +53,7 @@ class QuestionsTable extends AbstractDataTable
                     'id' => $id,
                     'name' => $name,
                     'actions' => [
+                        'view' => false,
                         'edit' => true,
                         'delete' => true,
                     ],
