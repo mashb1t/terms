@@ -2,36 +2,46 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Slot
  *
  * @property int $id
  * @property int $repeat_after_days
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Question[] $questions
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|\App\Models\Answer[] $answers
+ * @property-read int|null $answers_count
+ * @property-read Collection|\App\Models\Question[] $questions
  * @property-read int|null $questions_count
- * @method static \Illuminate\Database\Eloquent\Builder|Slot newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Slot newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Slot query()
- * @method static \Illuminate\Database\Eloquent\Builder|Slot whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Slot whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Slot whereRepeatAfterDays($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Slot whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Slot newModelQuery()
+ * @method static Builder|Slot newQuery()
+ * @method static Builder|Slot query()
+ * @method static Builder|Slot whereCreatedAt($value)
+ * @method static Builder|Slot whereId($value)
+ * @method static Builder|Slot whereRepeatAfterDays($value)
+ * @method static Builder|Slot whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Slot extends Model
 {
     protected $fillable = [
-        'repeat_after_days'
+        'repeat_after_days',
     ];
 
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class);
     }
 }

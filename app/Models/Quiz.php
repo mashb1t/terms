@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\QuizFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Quiz
@@ -14,21 +19,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \App\Models\User $owner
  * @property string $title
  * @property string $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Question[] $questions
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|\App\Models\Question[] $questions
  * @property-read int|null $questions_count
- * @method static \Database\Factories\QuizFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz query()
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereOwner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Quiz whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static QuizFactory factory(...$parameters)
+ * @method static Builder|Quiz newModelQuery()
+ * @method static Builder|Quiz newQuery()
+ * @method static Builder|Quiz query()
+ * @method static Builder|Quiz whereCreatedAt($value)
+ * @method static Builder|Quiz whereDescription($value)
+ * @method static Builder|Quiz whereId($value)
+ * @method static Builder|Quiz whereOwner($value)
+ * @method static Builder|Quiz whereTitle($value)
+ * @method static Builder|Quiz whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Quiz extends Model
 {

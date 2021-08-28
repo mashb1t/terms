@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\QuestionFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Question
@@ -14,24 +20,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $question
  * @property string $answer
  * @property int $slot_id
- * @property string|null $correct_answered_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|\App\Models\Answer[] $answers
+ * @property-read int|null $answers_count
  * @property-read \App\Models\Quiz $quiz
  * @property-read \App\Models\Slot $slot
- * @method static \Database\Factories\QuestionFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Question newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Question newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Question query()
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereAnswer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereCorrectAnsweredAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuestion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereQuizId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereSlotId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Question whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static QuestionFactory factory(...$parameters)
+ * @method static Builder|Question newModelQuery()
+ * @method static Builder|Question newQuery()
+ * @method static Builder|Question query()
+ * @method static Builder|Question whereAnswer($value)
+ * @method static Builder|Question whereCreatedAt($value)
+ * @method static Builder|Question whereId($value)
+ * @method static Builder|Question whereQuestion($value)
+ * @method static Builder|Question whereQuizId($value)
+ * @method static Builder|Question whereSlotId($value)
+ * @method static Builder|Question whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Question extends Model
 {
@@ -45,5 +51,10 @@ class Question extends Model
     public function slot(): BelongsTo
     {
         return $this->belongsTo(Slot::class);
+    }
+
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class);
     }
 }
