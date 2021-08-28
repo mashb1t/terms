@@ -28,6 +28,7 @@ class AnswerFactory extends Factory
             'question_id' => Question::all()->random()->id,
             'slot_id' => Slot::all()->random()->id,
             'correct' => $this->faker->boolean,
+            'skipped' => $this->faker->boolean,
         ];
     }
 }

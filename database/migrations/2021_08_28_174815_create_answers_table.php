@@ -18,6 +18,7 @@ class CreateAnswersTable extends Migration
             $table->foreignId('question_id')->constrained('questions')->cascadeOnDelete();
             $table->foreignId('slot_id')->constrained('slots');
             $table->boolean('correct');
+            $table->boolean('skipped')->default(false);
             $table->timestamps();
         });
     }

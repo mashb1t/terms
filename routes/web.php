@@ -31,5 +31,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     });
 
+    Route::view('answer', 'answers.view')->name('answer');
+
     Route::view('questions', 'questions/list')->name('questions');
 });

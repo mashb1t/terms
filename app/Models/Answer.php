@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $question_id
+ * @property int $skipped
  * @property int $slot_id
  * @property int $correct
  * @property Carbon|null $created_at
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Answer whereCreatedAt($value)
  * @method static Builder|Answer whereId($value)
  * @method static Builder|Answer whereQuestionId($value)
+ * @method static Builder|Answer whereSkipped($value)
  * @method static Builder|Answer whereSlotId($value)
  * @method static Builder|Answer whereUpdatedAt($value)
  * @mixin Eloquent
@@ -36,6 +38,13 @@ use Illuminate\Support\Carbon;
 class Answer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'question_id',
+        'slot_id',
+        'correct',
+        'skipped',
+    ];
 
     public function question(): BelongsTo
     {
