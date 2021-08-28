@@ -8,6 +8,7 @@ use App\Models\Slot;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
@@ -32,9 +33,21 @@ class QuestionsTable extends AbstractDataTable
     public function builder()
     {
         $builder = $this->model::query()
-            ->leftJoin('quizzes', 'questions.quiz_id', 'quizzes.id',)
-//            ->leftJoin('slots', 'questions.slot_id', 'slots.id')
-            ->whereOwner(auth()->id());
+            ->leftJoin('quizzes', 'questions.quiz_id', 'quizzes.id')
+            ->where('quizzes.owner', auth()->id());
+
+        // workaround for missing query string filter functionality
+
+        /** @var Quiz|null $quiz */
+        $quiz = Request::route('quiz');
+        if ($quiz) {
+            $builder->where('quizzes.id', $quiz->id);
+
+            // prevent adding filters double
+            $this->clearAllFilters();
+            // messy hack, add filter to second column
+            $this->doTextFilter(1, $quiz->id);
+        }
 
         return $builder;
     }
