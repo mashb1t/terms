@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Database\Query\Builder;
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -51,5 +53,27 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+
+Builder::macro('fullSql', function () {
+    $sql = str_replace(['%', '?'], ['%%', '%s'], $this->toSql());
+
+    $handledBindings = array_map(function ($binding) {
+        if (is_numeric($binding)) {
+            return $binding;
+        }
+
+        $value = str_replace(['\\', "'"], ['\\\\', "\'"], $binding);
+
+        return "'{$value}'";
+    }, $this->getConnection()->prepareBindings($this->getBindings()));
+
+    $fullSql = vsprintf($sql, $handledBindings);
+
+    return $fullSql;
+});
+
+Builder::macro('ddd', function () {
+    ddd($this->fullSql());
+});
 
 return $app;
