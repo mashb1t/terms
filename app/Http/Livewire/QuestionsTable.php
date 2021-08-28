@@ -15,10 +15,10 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 class QuestionsTable extends AbstractDataTable
 {
     public $model = Question::class;
-
     public ?Model $editing;
-
     public bool $showCreateButton = true;
+
+    public ?Quiz $quiz;
 
     public function rules()
     {
@@ -39,14 +39,14 @@ class QuestionsTable extends AbstractDataTable
         // workaround for missing query string filter functionality
 
         /** @var Quiz|null $quiz */
-        $quiz = Request::route('quiz');
-        if ($quiz) {
-            $builder->where('quizzes.id', $quiz->id);
+        $this->quiz = Request::route('quiz');
+        if ($this->quiz) {
+            $builder->where('quizzes.id', $this->quiz->id);
 
             // prevent adding filters double
             $this->clearAllFilters();
             // messy hack, add filter to second column
-            $this->doTextFilter(1, $quiz->id);
+            $this->doTextFilter(1, $this->quiz->id);
         }
 
         return $builder;
@@ -78,7 +78,7 @@ class QuestionsTable extends AbstractDataTable
     public function edit(?int $id = null)
     {
         $this->editing = Question::findOrNew($id);
-        $this->editing->quiz_id = $this->editing->quiz_id ?? $this->getCachedQuizzesCollection()->first()->id ?? null;
+        $this->editing->quiz_id = $this->editing->quiz_id ?? $this->quiz->id ?? $this->getCachedQuizzesCollection()->first()->id ?? null;
         $this->editing->slot_id = $this->editing->slot_id ?? $this->getCachedSlotsCollection()->first()->id  ?? null;
         $this->showEditModal = true;
     }

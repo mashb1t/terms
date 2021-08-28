@@ -10,9 +10,7 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
-
     public ?Model $editing;
-
     public bool $showCreateButton = true;
 
     public function rules()
