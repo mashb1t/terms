@@ -37,10 +37,10 @@ class QuestionsTable extends AbstractDataTable
     {
         return [
             NumberColumn::name('id')->label('ID'),
-            Column::name('quizzes.id')->label(__('# Quiz'))->width(100),
-            Column::name('slot_id')->width(100),
-            Column::name('question')->truncate(50),
-            Column::name('answer')->truncate(50),
+            Column::name('quizzes.id')->label(__('# Quiz'))->width(100)->filterable(),
+            Column::name('slot_id'),
+            Column::name('question')->truncate(30),
+            Column::name('answer')->truncate(30),
 
             Column::callback(['id', 'question'], function ($id, $name) {
                 return view('datatables.table-actions', [
