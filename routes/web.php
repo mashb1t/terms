@@ -19,14 +19,27 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/quizzes', 'quizzes/list')->name('quizzes');
+    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::view('quizzes', 'quizzes/list')->name('quizzes');
 
-    Route::get('/quiz/{quiz}', function (Quiz $quiz) {
-        return view('quizzes/view', [
-            'quiz' => $quiz,
+    Route::group(['prefix' => 'quiz/{quiz}'], function () {
+        Route::get('/', function (Quiz $quiz) {
+            return view('quizzes/view', [
+                'quiz' => $quiz,
+            ]);
+        })->name('quiz.view');
+
+        Route::resource('answer', App\Http\Controllers\AnswerController::class, [
+            'only' => [
+                'create',
+                'store'
+            ],
+            'names' => [
+                'create' => 'quiz.answer.create',
+                'store' => 'quiz.answer.store'
+            ],
         ]);
-    })->name('quiz.view');
+    });
 
-    Route::view('/questions', 'questions/list')->name('questions');
+    Route::view('questions', 'questions/list')->name('questions');
 });
