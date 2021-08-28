@@ -13,7 +13,7 @@
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
-        "mediconesystems/livewire-datatables": "^0.5.4"
+        "mediconesystems/livewire-datatables": "^0.6.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
