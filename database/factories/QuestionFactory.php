@@ -29,7 +29,6 @@ class QuestionFactory extends Factory
             'question' => $this->faker->text,
             'answer' => $this->faker->text,
             'slot_id' => Slot::all()->random()->id,
-            'correct_answered_at' => $this->faker->dateTimeBetween('-30 days')
         ];
     }
 }
