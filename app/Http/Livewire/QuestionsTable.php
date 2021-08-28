@@ -19,13 +19,6 @@ class QuestionsTable extends AbstractDataTable
 
     public bool $showCreateButton = true;
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-
-        dd($this);
-    }
-
     public function rules()
     {
         return [

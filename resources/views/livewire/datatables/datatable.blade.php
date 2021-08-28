@@ -178,7 +178,7 @@
 
     <x-jet-dialog-modal wire:model="showDeleteModal">
         <x-slot name="title">
-            {{ __('Delete ') }} "{{ $editing->title ?? null }}"
+            {{ __('Delete') }}@if($editing->title ?? $editing->id ?? false) "{{ $editing->title ?? $editing->id }}"@endif
         </x-slot>
 
         <x-slot name="content">
