@@ -46,7 +46,7 @@ class QuestionsTable extends AbstractDataTable
             // prevent adding filters double
             $this->clearAllFilters();
             // messy hack, add filter to second column
-            $this->doTextFilter(1, $this->quiz->id);
+            $this->doSelectFilter(1, $this->quiz->id);
         }
 
         return $builder;
@@ -56,10 +56,10 @@ class QuestionsTable extends AbstractDataTable
     {
         return [
             NumberColumn::name('id')->label('ID'),
-            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable(),
-            Column::name('slot_id')->label(__('Slot')),
-            Column::name('question')->truncate(30)->filterable(),
-            Column::name('answer')->truncate(30)->filterable(),
+            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable($this->getCachedQuizzesCollection()->pluck('id')),
+            Column::name('slot_id')->label(__('Slot'))->filterable($this->getCachedSlotsCollection()->pluck('id')),
+            Column::name('question')->truncate(30)->filterable()->searchable(),
+            Column::name('answer')->truncate(30)->filterable()->searchable(),
 
             Column::callback(['id', 'question'], function ($id, $name) {
                 return view('datatables.table-actions', [
