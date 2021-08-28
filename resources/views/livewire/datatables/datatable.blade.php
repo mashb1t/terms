@@ -199,7 +199,7 @@
     <form wire:submit.prevent="save">
         <x-modal.dialog wire:model.defer="showEditModal">
             <x-slot name="title"> @if(isset($editing->id))
-                    {{ __('Edit') }} "{{ $editing->title ?? null }}"
+                    {{ __('Edit') }} @if($editing->title ?? $editing->id ?? false) "{{ $editing->title ?? $editing->id }}"@endif
                 @else
                     {{ __('Create') }}
                 @endif
