@@ -29,16 +29,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             ]);
         })->name('quiz.view');
 
-        Route::resource('answer', App\Http\Controllers\AnswerController::class, [
-            'only' => [
-                'create',
-                'store'
-            ],
-            'names' => [
-                'create' => 'quiz.answer.create',
-                'store' => 'quiz.answer.store'
-            ],
-        ]);
     });
 
     Route::view('questions', 'questions/list')->name('questions');

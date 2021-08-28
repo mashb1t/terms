@@ -18,7 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->foreignId('quiz_id')->constrained()->cascadeOnDelete();
             $table->text('question');
             $table->text('answer');
-            $table->foreignId('slot_id');
+            $table->foreignId('slot_id')->constrained('slots');
             $table->timestamps();
         });
     }

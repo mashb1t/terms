@@ -57,8 +57,8 @@ class QuestionsTable extends AbstractDataTable
     {
         return [
             NumberColumn::name('id')->label('ID'),
-            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable($this->getCachedQuizzesCollection()->pluck('id')),
-            Column::name('slot_id')->label(__('Slot'))->filterable($this->getCachedSlotsCollection()->pluck('id')),
+            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable(CacheHelper::getCachedQuizzesCollection()->pluck('id')),
+            Column::name('slot_id')->label(__('Slot'))->filterable(CacheHelper::getCachedSlotsCollection()->pluck('id')),
             Column::name('question')->truncate(30)->filterable()->searchable(),
             Column::name('answer')->truncate(30)->filterable()->searchable(),
 
@@ -90,8 +90,8 @@ class QuestionsTable extends AbstractDataTable
 
         return view('datatables::datatable', [
             'edit_fields' => view('datatables.questions.modals.edit', [
-                'quizzes' => $this->getCachedQuizzesCollection(),
-                'slots' => $this->getCachedSlotsCollection(),
+                'quizzes' => CacheHelper::getCachedQuizzesCollection(),
+                'slots' => CacheHelper::getCachedSlotsCollection(),
             ]),
         ]);
     }
