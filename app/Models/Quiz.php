@@ -16,12 +16,12 @@ use Illuminate\Support\Carbon;
  * App\Models\Quiz
  *
  * @property int $id
- * @property \App\Models\User $owner
+ * @property User $owner
  * @property string $title
  * @property string $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\App\Models\Question[] $questions
+ * @property-read Collection|Question[] $questions
  * @property-read int|null $questions_count
  * @method static QuizFactory factory(...$parameters)
  * @method static Builder|Quiz newModelQuery()

@@ -17,9 +17,9 @@ use Illuminate\Support\Carbon;
  * @property int $repeat_after_days
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\App\Models\Answer[] $answers
+ * @property-read Collection|Answer[] $answers
  * @property-read int|null $answers_count
- * @property-read Collection|\App\Models\Question[] $questions
+ * @property-read Collection|Question[] $questions
  * @property-read int|null $questions_count
  * @method static Builder|Slot newModelQuery()
  * @method static Builder|Slot newQuery()

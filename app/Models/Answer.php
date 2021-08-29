@@ -21,8 +21,8 @@ use Illuminate\Support\Carbon;
  * @property int $skipped
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Question $question
- * @property-read \App\Models\Slot $slot
+ * @property-read Question $question
+ * @property-read Slot $slot
  * @method static AnswerFactory factory(...$parameters)
  * @method static Builder|Answer newModelQuery()
  * @method static Builder|Answer newQuery()
