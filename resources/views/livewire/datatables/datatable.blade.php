@@ -212,7 +212,7 @@
             <x-slot name="footer">
                 <x-jet-secondary-button wire:click="$set('showEditModal', false)">Cancel</x-jet-secondary-button>
 
-                <x-jet-button type="submit">Save</x-jet-button>
+                <x-jet-button type="submit" class="ml-2">Save</x-jet-button>
             </x-slot>
         </x-modal.dialog>
     </form>

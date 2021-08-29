@@ -4,7 +4,7 @@
     @else
         <x-jet-action-section>
             <x-slot name="title">
-                {{ $question->quiz->title }} ({{ $dueQuestionCount }} to do)
+                {{ $question->quiz->title }} ({{ $dueQuestionCount - 1 }} more to do)
             </x-slot>
 
             <x-slot name="description">
