@@ -6,8 +6,6 @@ use App\Helpers\CacheHelper;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Slot;
-use Cache;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use Mediconesystems\LivewireDatatables\Column;
@@ -16,7 +14,9 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 class QuestionsTable extends AbstractDataTable
 {
     public $model = Question::class;
+
     public ?Model $editing;
+
     public bool $showCreateButton = true;
 
     public ?Quiz $quiz;
@@ -35,6 +35,7 @@ class QuestionsTable extends AbstractDataTable
     {
         $builder = $this->model::query()
             ->leftJoin('quizzes', 'questions.quiz_id', 'quizzes.id')
+            ->leftJoin('question_slot', 'question_slot.question_id', 'questions.id')
             ->where('quizzes.owner', auth()->id());
 
         // workaround for missing query string filter functionality
@@ -57,8 +58,12 @@ class QuestionsTable extends AbstractDataTable
     {
         return [
             NumberColumn::name('id')->label('ID'),
-            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable(CacheHelper::getCachedQuizzesCollection()->pluck('id')),
-            Column::name('slot_id')->label(__('Slot'))->filterable(CacheHelper::getCachedSlotsCollection()->pluck('id')),
+            Column::name('quizzes.id')->linkTo('quiz')->label(__('# Quiz'))->width(100)->filterable(
+                CacheHelper::getCachedQuizzesCollection()->pluck('id')
+            ),
+            Column::name('question_slot.slot_id')->label(__('Slot'))->filterable(
+                CacheHelper::getCachedSlotsCollection()->pluck('id')
+            ),
             Column::name('question')->truncate(30)->filterable()->searchable(),
             Column::name('answer')->truncate(30)->filterable()->searchable(),
 
@@ -78,21 +83,25 @@ class QuestionsTable extends AbstractDataTable
 
     public function save()
     {
-        $this->validate();
-        # TODO check if this results in error due to question not having slot_id anymore
+        $validatedData = $this->validate();
+        $this->editing->offsetUnset('slot_id');
         $this->editing->save();
 
-        # TODO check if this works
-        $this->editing->slots->sync([$this->editing->slot_id]);
+        $this->editing->slot()->sync([$validatedData['editing']['slot_id']]);
         $this->showEditModal = false;
     }
 
     public function edit(?int $id = null)
     {
         $this->editing = Question::findOrNew($id);
-        $this->editing->quiz_id = $this->editing->quiz_id ?? $this->quiz->id ?? CacheHelper::getCachedQuizzesCollection()->first()->id ?? null;
-        # TODO check if this works
-        $this->editing->slot_id = $this->editing->slots->first() ?? CacheHelper::getCachedSlotsCollection()->first()->id  ?? null;
+        $this->editing->quiz_id = $this->editing->quiz_id
+            ?? $this->quiz->id
+            ?? CacheHelper::getCachedQuizzesCollection()->first()->id
+            ?? null;
+
+        $this->editing->slot_id = $this->editing->slot()->first()->id
+            ?? CacheHelper::getCachedSlotsCollection()->first()->id
+            ?? null;
         $this->showEditModal = true;
     }
 
