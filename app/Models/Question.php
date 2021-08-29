@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Question newModelQuery()
  * @method static Builder|Question newQuery()
  * @method static Builder|Question query()
+ * @method static Builder|Question unansweredOrDueQuestions()
  * @method static Builder|Question whereAnswer($value)
  * @method static Builder|Question whereCreatedAt($value)
  * @method static Builder|Question whereId($value)
@@ -83,5 +84,25 @@ class Question extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+
+    public function scopeUnansweredOrDueQuestions(Builder $builder)
+    {
+        $currentDate = Carbon::now();
+        $slots = CacheHelper::getCachedSlotsCollection();
+
+        // check if older than or equal to slot days
+        foreach ($slots as $slot) {
+            $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
+                $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
+                $builder->where('question_slot.slot_id', '=', $slot->id);
+                $builder->whereDate('question_slot.updated_at', '<=', $date);
+            });
+        }
+
+        // also include non-answered questions
+        $builder->orDoesntHave('slot');
+
+        return $builder;
     }
 }

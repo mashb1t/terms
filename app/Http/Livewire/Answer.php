@@ -50,26 +50,20 @@ class Answer extends Component
 
     protected function unansweredOrDueQuestions(): Builder
     {
-        $slots = CacheHelper::getCachedSlotsCollection();
-        $currentDate = Carbon::now();
-
-        $builder = Question::query()->select(['questions.*'])
+//        $builder = Question::query()->select(['questions.*', 'answers.id as answer_id'])
+        $builder = Question::query()
             ->withCount('answers')
             ->withSum('answers', 'skipped')
             ->withSum('answers', 'correct')
-            ->with('quiz');
+            ->with(['quiz', 'slot'])
+            ->leftJoin('question_slot', 'question_slot.question_id', 'questions.id')
+//            ->leftJoin('answers', 'answers.question_id', 'questions.id')
+            ->unansweredOrDueQuestions();
 
-        // check if older than or equal to slot days
-        foreach ($slots as $slot) {
-            $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
-                $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
-                $builder->where('questions.slot_id', '=', $slot->id);
-                $builder->whereDate('questions.updated_at', '<=', $date);
-            });
-        }
+//        $builder->orderBy('answers.id');
+//        $builder->groupBy('questions.id');
 
-        // also include non-answered questions
-        $builder->orDoesntHave('answers');
+//        ddd($builder->get());
 
         return $builder;
     }
