@@ -91,11 +91,12 @@ class QuestionsTable extends AbstractDataTable
         $this->showEditModal = false;
     }
 
-    public function edit(?int $id = null)
+    public function edit(?int $id = null, ?int $quizId = null)
     {
         $this->editing = Question::findOrNew($id);
         $this->editing->quiz_id = $this->editing->quiz_id
             ?? $this->quiz->id
+            ?? $quizId
             ?? CacheHelper::getCachedQuizzesCollection()->first()->id
             ?? null;
 

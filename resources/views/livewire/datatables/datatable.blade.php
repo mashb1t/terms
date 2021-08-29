@@ -5,7 +5,7 @@
         </div>
     @endif
     @if($showCreateButton)
-        <x-jet-button class="ml-2" wire:click="edit()" wire:loading.attr="disabled">
+        <x-jet-button id="createButton" class="ml-2" wire:click="edit()" wire:loading.attr="disabled" style="display: none">
             {{ __('Create') }}
         </x-jet-button>
     @endif

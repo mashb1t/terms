@@ -1,8 +1,23 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Questions') }}
-        </h2>
+
+        <div class="flex items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Questions') }}
+            </h2>
+
+            <x-jet-secondary-button class="ml-4" id="fakeCreateButton">
+                {{ __('Create Question') }}
+            </x-jet-secondary-button>
+        </div>
+
+        <script>
+            document.getElementById("fakeCreateButton").onclick = function () {
+                var createButton = document.getElementById("createButton");
+                createButton.setAttribute("wire:click", "edit(null, {!! Request::route('quiz')->id ?? null !!})");
+                createButton.click();
+            }
+        </script>
     </x-slot>
 
     <div class="py-12">
