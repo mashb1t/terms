@@ -21,14 +21,6 @@ class QuestionsTable extends AbstractDataTable
 
     public ?Quiz $quiz;
 
-    public function __construct($id = null)
-    {
-        parent::__construct($id);
-
-        /** @var Quiz|null $quiz */
-        $this->quiz = Request::route('quiz');
-    }
-
     public function rules()
     {
         return [
@@ -99,12 +91,11 @@ class QuestionsTable extends AbstractDataTable
         $this->showEditModal = false;
     }
 
-    public function edit(?int $id = null, ?int $quizId = null)
+    public function edit(?int $id = null)
     {
         $this->editing = Question::findOrNew($id);
         $this->editing->quiz_id = $this->editing->quiz_id
             ?? $this->quiz->id
-            ?? $quizId
             ?? CacheHelper::getCachedQuizzesCollection()->first()->id
             ?? null;
 
