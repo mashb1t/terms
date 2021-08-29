@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Helpers\CacheHelper;
 use App\Models\Question;
 use App\Models\Answer as AnswerModel;
+use App\Models\Slot;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -31,43 +32,9 @@ class Answer extends Component
         $this->question = null;
     }
 
-    public function skip()
+    public function answer(bool $correct, bool $skipped = false)
     {
-        $this->answerWrong(true);
-    }
-
-    public function answerWrong(bool $skipped = false)
-    {
-        $slotId = $skipped ? $this->question->slot_id : 1;
-
-        // save in slot 1 with correct = false
-        AnswerModel::create([
-            'question_id' => $this->question->id,
-            'slot_id' => $slotId,
-            'correct' => false,
-            'skipped' => $skipped
-        ]);
-
-        if (!$skipped) {
-            $this->question->slot_id = $slotId;
-            $this->question->save();
-        }
-
-        $this->question = $this->getNextQuestion();
-    }
-
-    public function answerCorrect()
-    {
-        AnswerModel::create([
-            'question_id' => $this->question->id,
-            'slot_id' => $this->question->slot_id,
-            'correct' => true,
-        ]);
-
-        // TODO add null check when migrating to $answers->slot_id
-        $this->question->slot_id = min($this->question->slot_id + 1, 5);;
-        $this->question->save();
-
+        $this->question->answerQuestion($correct, $skipped);
         $this->question = $this->getNextQuestion();
     }
 

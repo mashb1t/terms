@@ -24,11 +24,27 @@ class AnswerFactory extends Factory
      */
     public function definition()
     {
+        $slot = $slotIdOld = $slotIdNew = Slot::all()->random()->id;
+        $skipped = $this->faker->boolean;
+
+        if ($skipped) {
+            $correct = false;
+        } else {
+            $correct = $this->faker->boolean;
+
+            if ($correct) {
+                $slotIdNew = min($slot + 1, Slot::MAX_SLOT_ID);
+            } else {
+                $slotIdNew = 1;
+            }
+        }
+
         return [
             'question_id' => Question::all()->random()->id,
-            'slot_id' => Slot::all()->random()->id,
-            'correct' => $this->faker->boolean,
-            'skipped' => $this->faker->boolean,
+            'slot_id_old' => $slotIdOld,
+            'slot_id_new' => $slotIdNew,
+            'correct' => $correct,
+            'skipped' => $skipped,
         ];
     }
 }

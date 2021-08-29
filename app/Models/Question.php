@@ -43,6 +43,33 @@ class Question extends Model
 {
     use HasFactory;
 
+    public function answerQuestion(bool $correct, bool $skipped = false): void
+    {
+        $slotId = Answer::whereQuestionId($this->id)->orderByDesc('id')->first()->slot_id_new ?? $this->slot_id;
+
+        if ($correct) {
+            $newSlotId = min($slotId + 1, Slot::MAX_SLOT_ID);
+        } else {
+            $newSlotId = $skipped ? $slotId : 1;
+        }
+
+        Answer::create([
+            'question_id' => $this->id,
+            'slot_id_old' => $slotId,
+            'slot_id_new' => $newSlotId,
+            'correct' => $correct,
+            'skipped' => $skipped
+        ]);
+
+        $this->slot_id = $newSlotId;
+        $this->save();
+    }
+
+    public function skipQuestion(): void
+    {
+        $this->answerQuestion(false, true);
+    }
+
     public function quiz(): BelongsTo
     {
         return $this->belongsTo(Quiz::class);

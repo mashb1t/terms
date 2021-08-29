@@ -31,6 +31,8 @@ use Illuminate\Support\Carbon;
  */
 class Slot extends Model
 {
+    const MAX_SLOT_ID = 5;
+
     protected $fillable = [
         'repeat_after_days',
     ];
@@ -42,6 +44,6 @@ class Slot extends Model
 
     public function answers(): HasMany
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Answer::class, 'slot_id_new');
     }
 }

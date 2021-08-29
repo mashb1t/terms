@@ -15,9 +15,10 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $question_id
- * @property int $skipped
- * @property int $slot_id
+ * @property int $slot_id_old
+ * @property int $slot_id_new
  * @property int $correct
+ * @property int $skipped
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read \App\Models\Question $question
@@ -31,7 +32,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Answer whereId($value)
  * @method static Builder|Answer whereQuestionId($value)
  * @method static Builder|Answer whereSkipped($value)
- * @method static Builder|Answer whereSlotId($value)
+ * @method static Builder|Answer whereSlotIdNew($value)
+ * @method static Builder|Answer whereSlotIdOld($value)
  * @method static Builder|Answer whereUpdatedAt($value)
  * @mixin Eloquent
  */
@@ -41,7 +43,8 @@ class Answer extends Model
 
     protected $fillable = [
         'question_id',
-        'slot_id',
+        'slot_id_old',
+        'slot_id_new',
         'correct',
         'skipped',
     ];
@@ -53,6 +56,6 @@ class Answer extends Model
 
     public function slot(): BelongsTo
     {
-        return $this->belongsTo(Slot::class);
+        return $this->belongsTo(Slot::class, 'slot_id_new', 'id');
     }
 }

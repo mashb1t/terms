@@ -25,11 +25,11 @@
                 @endif
 
                 <div class="mt-5">
-                    <x-jet-danger-button wire:click="answerWrong()" wire:loading.attr="disabled">
+                    <x-jet-danger-button wire:click="answer(false)" wire:loading.attr="disabled">
                         {{ __('Wrong') }}
                     </x-jet-danger-button>
 
-                    <x-jet-secondary-button wire:click="skip()" wire:loading.attr="disabled">
+                    <x-jet-secondary-button wire:click="answer(false, true)" wire:loading.attr="disabled">
                         {{ __('Skip') }}
                     </x-jet-secondary-button>
 
@@ -37,7 +37,7 @@
                         {{ __('Show answer') }}
                     </x-jet-secondary-button>
 
-                    <x-jet-button wire:click="answerCorrect()" wire:loading.attr="disabled">
+                    <x-jet-button wire:click="answer(true)" wire:loading.attr="disabled">
                         {{ __('Correct') }}
                     </x-jet-button>
                 </div>
