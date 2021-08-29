@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\QuestionSlot;
 use App\Models\Quiz;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -39,8 +40,12 @@ class AnswerFactory extends Factory
             }
         }
 
+        $question = Question::query()->whereNotIn('id', QuestionSlot::all()->pluck('question_id'))->inRandomOrder()->first();
+
+        $question->slot()->sync([$slotIdNew]);
+
         return [
-            'question_id' => Question::all()->random()->id,
+            'question_id' => $question->id,
             'slot_id_old' => $slotIdOld,
             'slot_id_new' => $slotIdNew,
             'correct' => $correct,
