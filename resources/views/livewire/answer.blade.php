@@ -33,7 +33,7 @@
                         {{ __('Skip') }}
                     </x-jet-secondary-button>
 
-                    <x-jet-secondary-button wire:click="showAnswer()" wire:loading.attr="disabled">
+                    <x-jet-secondary-button id="toggle" wire:loading.attr="disabled">
                         {{ __('Show answer') }}
                     </x-jet-secondary-button>
 
@@ -43,6 +43,19 @@
                 </div>
             </x-slot>
         </x-jet-action-section>
-
     @endif
 </div>
+
+<script>
+    const targetDiv = document.getElementById("answer");
+    const btn = document.getElementById("toggle");
+    btn.onclick = function () {
+        if (targetDiv.style.display !== "none") {
+            targetDiv.style.display = "none";
+            btn.innerHTML = "{{ __('Show Answer') }}";
+        } else {
+            targetDiv.style.display = "block";
+            btn.innerHTML = "{{ __('Hide Answer') }}";
+        }
+    }
+</script>
