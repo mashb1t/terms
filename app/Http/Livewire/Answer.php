@@ -15,6 +15,7 @@ class Answer extends Component
     public ?Question $question;
 
     public bool $showAnswer = false;
+    public int $dueQuestionCount = 0;
 
     public function render()
     {
@@ -25,6 +26,7 @@ class Answer extends Component
 
     public function showAnswer()
     {
+        // TODO fix display of question
         $this->showAnswer = true;
         $this->question = null;
     }
@@ -36,7 +38,7 @@ class Answer extends Component
 
     public function answerWrong(bool $skipped = false)
     {
-        $slotId = 1;
+        $slotId = $skipped ? $this->question->slot_id : 1;
 
         // save in slot 1 with correct = false
         AnswerModel::create([
@@ -56,17 +58,14 @@ class Answer extends Component
 
     public function answerCorrect()
     {
-        // TODO add null check when migrating to $answers->slot_id
-        $slotId = min($this->question->slot_id + 1, 5);
-
-        // save in slot 1 with correct = false
         AnswerModel::create([
             'question_id' => $this->question->id,
-            'slot_id' => $slotId,
+            'slot_id' => $this->question->slot_id,
             'correct' => true,
         ]);
 
-        $this->question->slot_id = $slotId;
+        // TODO add null check when migrating to $answers->slot_id
+        $this->question->slot_id = min($this->question->slot_id + 1, 5);;
         $this->question->save();
 
         $this->question = $this->getNextQuestion();
@@ -75,7 +74,11 @@ class Answer extends Component
     protected function getNextQuestion(): Model|null
     {
         $this->showAnswer = false;
-        return $this->unansweredAndDueQuestions()->limit(1)->first();
+
+        $query = $this->unansweredAndDueQuestions();
+        $this->dueQuestionCount = $query->count();
+
+        return $query->limit(1)->first();
     }
 
     protected function unansweredAndDueQuestions(): Builder
@@ -83,11 +86,10 @@ class Answer extends Component
         $slots = CacheHelper::getCachedSlotsCollection();
         $currentDate = Carbon::now();
 
-        $builder = Question::query()->select(['questions.*', 'answers.slot_id as answers_slot_id', 'answers.id as answer_id'])
+        $builder = Question::query()->select(['questions.*'])
             ->withCount('answers')
             ->withSum('answers', 'skipped')
             ->withSum('answers', 'correct')
-            ->leftJoin('answers', 'answers.question_id', 'questions.id')
             ->with('quiz');
 
         // check if older than or equal to slot days
@@ -100,10 +102,7 @@ class Answer extends Component
         }
 
         // also include non-answered questions
-        $builder->orWhereNull('answers.id');
-
-        // this allows skipped questions to be ordered last
-        $builder->orderBy('answers.id');
+        $builder->orDoesntHave('answers');
 
         return $builder;
     }
