@@ -92,10 +92,10 @@ class Answer extends Component
 
         // check if older than or equal to slot days
         foreach ($slots as $slot) {
-            $builder->orWhere(function ($builder) use ($slot, $currentDate) {
+            $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
                 $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
-                $builder->where('answers.slot_id', '=', $slot->id);
-                $builder->whereDate('answers.updated_at', '<=', $date);
+                $builder->where('questions.slot_id', '=', $slot->id);
+                $builder->whereDate('questions.updated_at', '<=', $date);
             });
         }
 
