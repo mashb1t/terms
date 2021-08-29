@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\CacheHelper;
 use Database\Factories\QuestionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -19,13 +21,13 @@ use Illuminate\Support\Carbon;
  * @property int $quiz_id
  * @property string $question
  * @property string $answer
- * @property int $slot_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\App\Models\Answer[] $answers
+ * @property-read Collection|Answer[] $answers
  * @property-read int|null $answers_count
- * @property-read \App\Models\Quiz $quiz
- * @property-read \App\Models\Slot $slot
+ * @property-read Quiz $quiz
+ * @property-read Collection|Slot[] $slot
+ * @property-read int|null $slot_count
  * @method static QuestionFactory factory(...$parameters)
  * @method static Builder|Question newModelQuery()
  * @method static Builder|Question newQuery()
@@ -35,7 +37,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Question whereId($value)
  * @method static Builder|Question whereQuestion($value)
  * @method static Builder|Question whereQuizId($value)
- * @method static Builder|Question whereSlotId($value)
  * @method static Builder|Question whereUpdatedAt($value)
  * @mixin Eloquent
  */
@@ -45,7 +46,7 @@ class Question extends Model
 
     public function answerQuestion(bool $correct, bool $skipped = false): void
     {
-        $slotId = Answer::whereQuestionId($this->id)->orderByDesc('id')->first()->slot_id_new ?? $this->slot_id;
+        $slotId = $this->slot->first()->slot_id ?? 1;
 
         if ($correct) {
             $newSlotId = min($slotId + 1, Slot::MAX_SLOT_ID);
@@ -61,8 +62,7 @@ class Question extends Model
             'skipped' => $skipped
         ]);
 
-        $this->slot_id = $newSlotId;
-        $this->save();
+        $this->slot()->sync([$newSlotId]);
     }
 
     public function skipQuestion(): void
@@ -75,9 +75,9 @@ class Question extends Model
         return $this->belongsTo(Quiz::class);
     }
 
-    public function slot(): BelongsTo
+    public function slot(): BelongsToMany
     {
-        return $this->belongsTo(Slot::class);
+        return $this->belongsToMany(Slot::class)->using(QuestionSlot::class)->withTimestamps();
     }
 
     public function answers(): HasMany

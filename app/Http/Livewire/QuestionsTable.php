@@ -76,11 +76,23 @@ class QuestionsTable extends AbstractDataTable
         ];
     }
 
+    public function save()
+    {
+        $this->validate();
+        # TODO check if this results in error due to question not having slot_id anymore
+        $this->editing->save();
+
+        # TODO check if this works
+        $this->editing->slots->sync([$this->editing->slot_id]);
+        $this->showEditModal = false;
+    }
+
     public function edit(?int $id = null)
     {
         $this->editing = Question::findOrNew($id);
         $this->editing->quiz_id = $this->editing->quiz_id ?? $this->quiz->id ?? CacheHelper::getCachedQuizzesCollection()->first()->id ?? null;
-        $this->editing->slot_id = $this->editing->slot_id ?? CacheHelper::getCachedSlotsCollection()->first()->id  ?? null;
+        # TODO check if this works
+        $this->editing->slot_id = $this->editing->slots->first() ?? CacheHelper::getCachedSlotsCollection()->first()->id  ?? null;
         $this->showEditModal = true;
     }
 

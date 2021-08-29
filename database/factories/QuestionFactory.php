@@ -28,7 +28,6 @@ class QuestionFactory extends Factory
             'quiz_id' => Quiz::all()->random()->id,
             'question' => $this->faker->text,
             'answer' => $this->faker->text,
-            'slot_id' => Slot::all()->random()->id,
         ];
     }
 }

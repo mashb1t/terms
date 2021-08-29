@@ -10,7 +10,7 @@
             <x-slot name="description">
                 question = {{ $question->question }}<br>
                 question id = {{ $question->id }}<br>
-                current slot = {{ $question->slot_id }}<br>
+                current slot = {{ $question->slot()->first()->slot_id ?? 1 }}<br>
                 total answers = {{ $question->answers_count }}<br>
                 skipped = {{ $question->answers_sum_skipped ?? 0 }}<br>
                 correct = {{ $question->answers_sum_correct ?? 0 }}<br>

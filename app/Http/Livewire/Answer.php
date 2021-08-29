@@ -42,13 +42,13 @@ class Answer extends Component
     {
         $this->showAnswer = false;
 
-        $query = $this->unansweredAndDueQuestions();
+        $query = $this->unansweredOrDueQuestions();
         $this->dueQuestionCount = $query->count();
 
         return $query->limit(1)->first();
     }
 
-    protected function unansweredAndDueQuestions(): Builder
+    protected function unansweredOrDueQuestions(): Builder
     {
         $slots = CacheHelper::getCachedSlotsCollection();
         $currentDate = Carbon::now();

@@ -6,6 +6,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -37,13 +38,8 @@ class Slot extends Model
         'repeat_after_days',
     ];
 
-    public function questions(): HasMany
+    public function questions(): BelongsToMany
     {
-        return $this->hasMany(Question::class);
-    }
-
-    public function answers(): HasMany
-    {
-        return $this->hasMany(Answer::class, 'slot_id_new');
+        return $this->belongsToMany(Question::class)->using(QuestionSlot::class)->withTimestamps();
     }
 }
