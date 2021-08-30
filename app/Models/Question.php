@@ -103,7 +103,7 @@ class Question extends Model
             $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
                 $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
                 $builder->where('question_slot.slot_id', '=', $slot->id);
-                $builder->whereDate('question_slot.updated_at', '<=', $date);
+                $builder->whereDate('question_slot.created_at', '<=', $date);
             });
         }
 
