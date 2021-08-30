@@ -47,7 +47,7 @@ class Question extends Model
 
     public function answerQuestion(bool $correct, bool $skipped = false): void
     {
-        $slotId = $this->slot->first()->slot_id ?? 1;
+        $slotId = $this->slot->first()->id ?? 1;
 
         if ($correct) {
             $newSlotId = min($slotId + 1, Slot::MAX_SLOT_ID);
