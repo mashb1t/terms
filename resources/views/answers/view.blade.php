@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Answer Due Questions') }}
+            {{ __('Answer Due Questions (all quizzes)') }}
         </h2>
     </x-slot>
 
