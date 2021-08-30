@@ -41,7 +41,6 @@ class Answer extends Component
             ->withSum('answers', 'skipped')
             ->withSum('answers', 'correct')
             ->with(['quiz', 'slot'])
-            ->leftJoin('question_slot', 'question_slot.question_id', 'questions.id')
             ->unansweredOrDueQuestions()
             ->orderBy('question_slot.updated_at');
     }

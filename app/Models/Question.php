@@ -65,7 +65,7 @@ class Question extends Model
 
         $this->slot()->sync([$newSlotId]);
 
-        // update timestamp on pivot table if slot didn't change
+        // update timestamp on pivot table to delay question answer (doesn't skip for today)
         QuestionSlot::whereQuestionId($this->id)
             ->whereSlotId($newSlotId)
             ->update(['updated_at' => Carbon::now()]);
@@ -95,6 +95,8 @@ class Question extends Model
     {
         $currentDate = Carbon::now();
         $slots = CacheHelper::getCachedSlotsCollection();
+
+        $builder->leftJoin('question_slot', 'question_slot.question_id', 'questions.id');
 
         // check if older than or equal to slot days
         foreach ($slots as $slot) {
