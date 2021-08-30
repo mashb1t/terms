@@ -64,6 +64,11 @@ class Question extends Model
         ]);
 
         $this->slot()->sync([$newSlotId]);
+
+        // update timestamp on pivot table if slot didn't change
+        QuestionSlot::whereQuestionId($this->id)
+            ->whereSlotId($newSlotId)
+            ->update(['updated_at' => Carbon::now()]);
     }
 
     public function skipQuestion(): void

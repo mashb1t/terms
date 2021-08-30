@@ -18,11 +18,9 @@
             </x-slot>
 
             <x-slot name="content">
-                @if($showAnswer)
-                    <div class="max-w-xl text-sm text-gray-600">
-                        {{ $question->answer }}
-                    </div>
-                @endif
+                <div id="answer" class="max-w-xl text-sm text-gray-600" style="display: none">
+                    {{ $question->answer }}
+                </div>
 
                 <div class="mt-5">
                     <x-jet-danger-button wire:click="answer(false)" wire:loading.attr="disabled">

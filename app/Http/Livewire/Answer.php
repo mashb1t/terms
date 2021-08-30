@@ -13,10 +13,6 @@ class Answer extends Component
 
     public int $dueQuestionCount = 0;
 
-    protected $listeners = [
-        'showAnswer' => 'showAnswer',
-    ];
-
     public function render()
     {
         $this->question = $this->getNextQuestion();
@@ -40,21 +36,13 @@ class Answer extends Component
 
     protected function unansweredOrDueQuestions(): Builder
     {
-//        $builder = Question::query()->select(['questions.*', 'answers.id as answer_id'])
-        $builder = Question::query()
+        return Question::query()
             ->withCount('answers')
             ->withSum('answers', 'skipped')
             ->withSum('answers', 'correct')
             ->with(['quiz', 'slot'])
             ->leftJoin('question_slot', 'question_slot.question_id', 'questions.id')
-//            ->leftJoin('answers', 'answers.question_id', 'questions.id')
-            ->unansweredOrDueQuestions();
-
-//        $builder->orderBy('answers.id');
-//        $builder->groupBy('questions.id');
-
-//        ddd($builder->get());
-
-        return $builder;
+            ->unansweredOrDueQuestions()
+            ->orderBy('question_slot.updated_at');
     }
 }
