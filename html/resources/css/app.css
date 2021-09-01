@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+[x-cloak] {
+    display: none;
+}
+
+.-mx-0-5 {
+    margin-left: -0.125rem;
+    margin-right: -0.125rem;
+}

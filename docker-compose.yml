@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  nginx:
+    restart: unless-stopped
+    image: nginx
+    links:
+      - php
+    volumes:
+      - ./www/terms.mashb1t.de:/var/www/html
+      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
+    environment:
+      - VIRTUAL_HOST=terms.mashb1t.de
+      - LETSENCRYPT_HOST=terms.mashb1t.de
+      - LETSENCRYPT_EMAIL=info@mash1t.de
+    ports:
+      - "3000:80"
+
+  php:
+    restart: unless-stopped
+    build: dockerfiles/php8
+    command: php-fpm
+    working_dir: /var/www/html
+    volumes:
+      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+    links:
+      - mariadb
+
+  db:
+    restart: unless-stopped
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=changeme
+    volumes:
+      - db-terms:/var/lib/mysql
+    ports:
+      - "33006:3306"
+
+volumes:
+  db-terms:

@@ -1,0 +1,5 @@
+volumes/
+.idea
+.ssh
+.modman
+dockerfiles/php8/image-files/var/www/html
