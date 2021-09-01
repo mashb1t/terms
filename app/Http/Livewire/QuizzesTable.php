@@ -27,7 +27,7 @@ class QuizzesTable extends AbstractDataTable
             ->leftJoin('questions', 'quizzes.id', 'questions.quiz_id')
 //            ->leftJoin('slots', 'questions.slot_id', 'slots.id')
             ->whereOwner(auth()->id())
-            ->groupBy('quizzes.id');
+            ->groupBy('quizzes.id', 'quizzes.title', 'quizzes.description');
 
         return $builder;
     }
