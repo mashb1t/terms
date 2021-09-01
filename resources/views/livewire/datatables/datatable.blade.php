@@ -130,7 +130,7 @@
                             @endforeach
                         </div>
                     @empty
-                        <p class="p-3 text-lg text-teal-600">
+                        <p class="p-3 text-gray-600">
                             {{ __("There's Nothing to show at the moment") }}
                         </p>
                     @endforelse
