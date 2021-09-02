@@ -2,11 +2,11 @@ version: "3.9"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx
+    image: nginx:1.21
     links:
       - php
     volumes:
-      - ./www/terms.mashb1t.de:/var/www/html
+      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
       - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
       - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
     environment:
@@ -20,11 +20,10 @@ services:
     restart: unless-stopped
     build: dockerfiles/php8
     command: php-fpm
-    working_dir: /var/www/html
-    volumes:
-      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+#    volumes:
+#      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
     links:
-      - mariadb
+      - db
 
   db:
     restart: unless-stopped
