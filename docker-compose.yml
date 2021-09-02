@@ -2,13 +2,18 @@ version: "3.9"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx:1.21
+    build:
+      dockerfile: Dockerfile
+      context: ./dockerfiles
+      target: terms-nginx
+    image: terms-nginx
     links:
       - php
     volumes:
-      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
-      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
-      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
+#      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+#      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
+#      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
+      - terms-storage:/var/www/html/storage-nginx
     environment:
       - VIRTUAL_HOST=terms.mashb1t.de
       - LETSENCRYPT_HOST=terms.mashb1t.de
@@ -18,10 +23,15 @@ services:
 
   php:
     restart: unless-stopped
-    build: dockerfiles/php8
+    build:
+      dockerfile: Dockerfile
+      context: ./dockerfiles
+      target: terms-php
+    image: terms-php
     command: php-fpm
-#    volumes:
+    volumes:
 #      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+      - terms-storage:/var/www/html/storage
     links:
       - db
 
@@ -31,9 +41,10 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=changeme
     volumes:
-      - db-terms:/var/lib/mysql
+      - terms-db:/var/lib/mysql
     ports:
       - "33006:3306"
 
 volumes:
-  db-terms:
+  terms-db:
+  terms-storage:

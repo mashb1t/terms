@@ -1,6 +1,6 @@
-FROM php:8.0-fpm
+FROM php:8.0-fpm as terms-php
 
-COPY image-files/usr/local/bin/docker-image-cleanup /usr/local/bin/docker-image-cleanup
+COPY php/usr/local/bin/docker-image-cleanup /usr/local/bin/docker-image-cleanup
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
@@ -25,7 +25,7 @@ RUN apt-get update \
     && install-php-extensions bcmath curl gd imagick intl json opcache pdo pdo_mysql redis zip \
     && sh /usr/local/bin/docker-image-cleanup
 
-COPY image-files/ /
+COPY php/ /
 
 WORKDIR /var/www/html
 
@@ -44,6 +44,26 @@ RUN npm run production
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
-RUN chmod -R 775 /var/www/html/storage \
+# laravel
+# ---
+RUN php artisan storage:link
+
+# permissions
+# ---
+RUN chown -R www-data:www-data /var/www/html \
+    && chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/public \
     && chmod -R 775 /var/www/html/bootstrap/cache
+
+
+FROM nginx:1.21 as terms-nginx
+
+COPY --from=terms-php /var/www/html/public /var/www/html/public
+
+COPY nginx/etc/nginx/ /etc/nginx/
+
+RUN cd /var/www/html/public \
+    # clear copied storage symlink
+    && rm storage \
+    && ln -s /var/www/html/storage-nginx/app/public storage
