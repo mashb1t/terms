@@ -29,21 +29,28 @@ services:
       target: terms-php
     image: terms-php
     command: php-fpm
+    env_file:
+      - .env
     volumes:
 #      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
       - terms-storage:/var/www/html/storage
     links:
       - db
+      - redis
 
   db:
     restart: unless-stopped
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=changeme
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - terms-db:/var/lib/mysql
     ports:
       - "33006:3306"
+
+  redis:
+    image: redis:6
+    restart: always
 
 volumes:
   terms-db:

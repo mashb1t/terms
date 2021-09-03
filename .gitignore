@@ -2,4 +2,5 @@ volumes/
 .idea
 .ssh
 .modman
+.env
 dockerfiles/php8/image-files/var/www/html
