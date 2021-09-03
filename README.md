@@ -1,4 +1,4 @@
-[![Alt text](./public/images/colorful.png)](https://terms.mashb1t.de)
+[![terms.mashb1t.de](https://raw.githubusercontent.com/mashb1t/vocabulary-trainer/master/public/images/colorful.svg)](https://terms.mashb1t.de)
 
 [![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fvocabulary.mashb1t.de)](https://vocabulary.mashb1t.de)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
