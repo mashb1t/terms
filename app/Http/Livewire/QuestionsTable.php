@@ -21,6 +21,8 @@ class QuestionsTable extends AbstractDataTable
 
     public ?Quiz $quiz;
 
+    public $exportable = true;
+
     public function rules()
     {
         return [
@@ -77,7 +79,7 @@ class QuestionsTable extends AbstractDataTable
                         'delete' => true,
                     ],
                 ]);
-            })->label('Actions'),
+            })->label('Actions')->excludeFromExport(),
         ];
     }
 
