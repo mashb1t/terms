@@ -131,7 +131,7 @@
                         </div>
                     @empty
                         <p class="p-3 text-gray-600">
-                            {{ __("There's Nothing to show at the moment") }}
+                            {{ __("There's nothing to show at the moment") }}
                         </p>
                     @endforelse
                 </div>
