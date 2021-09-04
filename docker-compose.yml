@@ -18,8 +18,8 @@ services:
       - VIRTUAL_HOST=terms.mashb1t.de
       - LETSENCRYPT_HOST=terms.mashb1t.de
       - LETSENCRYPT_EMAIL=info@mash1t.de
-    ports:
-      - "3000:80"
+#    ports:
+#      - "3000:80"
 
   php:
     restart: unless-stopped
@@ -45,8 +45,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - terms-db:/var/lib/mysql
-    ports:
-      - "33006:3306"
+#    ports:
+#      - "33006:3306"
 
   redis:
     image: redis:6
