@@ -1,7 +1,7 @@
 [![terms.mashb1t.de](https://raw.githubusercontent.com/mashb1t/vocabulary-trainer/master/public/images/colorful.svg)](https://terms.mashb1t.de)
 
-[![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fvocabulary.mashb1t.de)](https://vocabulary.mashb1t.de)
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Website Status](https://img.shields.io/website?url=https%3A%2F%2Fterms.mashb1t.de)](https://terms.mashb1t.de)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D8.0-8892BF)](https://www.php.net)
 [![License](https://img.shields.io/github/license/mashb1t/vocabulary-trainer)](https://github.com/mashb1t/vocabulary-trainer/blob/master/LICENSE)
 
