@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Question newModelQuery()
  * @method static Builder|Question newQuery()
  * @method static Builder|Question query()
+ * @method static Builder|Question myUnansweredOrDueQuestions()
  * @method static Builder|Question unansweredOrDueQuestions()
  * @method static Builder|Question whereAnswer($value)
  * @method static Builder|Question whereCreatedAt($value)
@@ -98,18 +99,29 @@ class Question extends Model
 
         $builder->leftJoin('question_slot', 'question_slot.question_id', 'questions.id');
 
-        // check if older than or equal to slot days
-        foreach ($slots as $slot) {
-            $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
-                $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
-                $builder->where('question_slot.slot_id', '=', $slot->id);
-                $builder->whereDate('question_slot.created_at', '<=', $date);
-            });
-        }
+        $builder->where(function(Builder $builder) use ($currentDate, $slots) {
+            // check if older than or equal to slot days
+            foreach ($slots as $slot) {
+                $builder->orWhere(function (Builder $builder) use ($slot, $currentDate) {
+                    $date = Carbon::parse($currentDate)->subDays($slot->repeat_after_days);
+                    $builder->where('question_slot.slot_id', '=', $slot->id);
+                    $builder->whereDate('question_slot.created_at', '<=', $date);
+                });
+            }
 
-        // also include non-answered questions
-        $builder->orDoesntHave('slot');
+            // also include non-answered questions
+            $builder->orDoesntHave('slot');
+
+            return $builder;
+        });
 
         return $builder;
+    }
+
+    public function scopeMyUnansweredOrDueQuestions(Builder $builder)
+    {
+        $builder->whereRelation('quiz', 'owner', '=', auth()->id());
+
+        return $this->scopeUnansweredOrDueQuestions($builder);
     }
 }
