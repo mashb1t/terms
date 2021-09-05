@@ -1,3 +1,13 @@
+FROM node:14 as terms-node
+
+COPY php/ /
+
+WORKDIR /var/www/html
+
+RUN npm ci
+RUN npm run production
+
+
 FROM php:8.0-fpm as terms-php
 
 COPY php/usr/local/bin/docker-image-cleanup /usr/local/bin/docker-image-cleanup
@@ -29,20 +39,15 @@ COPY php/ /
 
 WORKDIR /var/www/html
 
-# node
-# ---
-ENV NODE_VERSION=14
-
-RUN curl -sL "https://deb.nodesource.com/setup_${NODE_VERSION}.x" | bash - \
-  && apt-get install -y nodejs
-
-RUN npm ci
-RUN npm run production
-
 # composer
 # ---
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
 RUN composer install --optimize-autoloader --no-dev
+
+# node
+# ---
+COPY --from=terms-node /var/www/html/public /var/www/html/public
+COPY --from=terms-node /var/www/html/node_modules /var/www/html/node_modules
 
 # laravel
 # ---
