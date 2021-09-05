@@ -30,14 +30,10 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        @env('production')
-            @include('analytics.analytics-head')
-        @endenv
+        @include('analytics.analytics-head')
     </head>
     <body class="font-sans antialiased">
-        @env('production')
-            @include('analytics.analytics-body')
-        @endenv
+        @include('analytics.analytics-body')
         <div class="font-sans text-gray-900 antialiased bg-gray-100 pb-5">
             {{ $slot }}
         </div>
