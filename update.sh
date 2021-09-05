@@ -1,5 +1,7 @@
 #!/bin/bash
 
+docker system prune -f
+
 # pull latest version of stacks repository itself
 git pull
 
@@ -10,7 +12,7 @@ git checkout master
 git pull
 cd ../../../../../
 
-docker-compose build --parallel
+docker-compose build
 
 docker-compose up -d
 
