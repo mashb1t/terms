@@ -1,1 +1,1 @@
-@include('quizzes/list')
+@include('quizzes.list')
