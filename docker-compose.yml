@@ -47,6 +47,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - terms-db:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
 #    ports:
 #      - "33006:3306"
     network_mode: bridge
