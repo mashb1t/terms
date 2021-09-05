@@ -41,8 +41,10 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        @include('analytics.analytics-head')
     </head>
     <body class="font-sans antialiased">
+        @include('analytics.analytics-body')
         <x-jet-banner />
 
         <div class="min-h-screen bg-gray-100 flex flex-col">
@@ -63,6 +65,10 @@
             </main>
 
             @include('footer')
+
+            @env('production')
+                @include('analytics.cookiebot.cookiebot-modal')
+            @endenv
         </div>
 
         @stack('modals')
