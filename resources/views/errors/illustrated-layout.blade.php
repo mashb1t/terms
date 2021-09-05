@@ -495,8 +495,5 @@
                 @yield('image')
             </div>
         </div>
-        @env('production')
-            @include('analytics.cookiebot.cookiebot-modal')
-        @endenv
     </body>
 </html>

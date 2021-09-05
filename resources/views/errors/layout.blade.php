@@ -67,7 +67,4 @@
             </div>
         </div>
     </body>
-    @env('production')
-        @include('analytics.cookiebot.cookiebot-modal')
-    @endenv
 </html>

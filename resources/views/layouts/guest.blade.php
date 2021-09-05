@@ -23,14 +23,29 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/ui@latest/dist/tailwind-ui.min.css">
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
+        @livewireStyles
+
+        <!-- Alpine -->
+    {{--        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>--}}
+
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        @env('production')
+            @include('analytics.analytics-head')
+        @endenv
     </head>
-    <body>
+    <body class="font-sans antialiased">
+        @env('production')
+            @include('analytics.analytics-body')
+        @endenv
         <div class="font-sans text-gray-900 antialiased bg-gray-100 pb-5">
             {{ $slot }}
         </div>
 
         @include('footer')
     </body>
+
+    @stack('modals')
+
+    @livewireScripts
 </html>

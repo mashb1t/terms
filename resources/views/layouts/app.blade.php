@@ -23,11 +23,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/ui@latest/dist/tailwind-ui.min.css">
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
+        @livewireStyles
 
         <!-- Alpine -->
 {{--        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>--}}
-
-        @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
@@ -59,10 +58,6 @@
             </main>
 
             @include('footer')
-
-            @env('production')
-                @include('analytics.cookiebot.cookiebot-modal')
-            @endenv
         </div>
 
         @stack('modals')
