@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker system prune -f
+#docker system prune -f
 
 # pull latest version of stacks repository itself
 git pull
