@@ -10,9 +10,9 @@ services:
     links:
       - php
     volumes:
-#      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
-#      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
-#      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
+      #- ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+      #      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
+      #      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
       - terms-storage:/var/www/html/storage-nginx
     environment:
       - VIRTUAL_HOST=terms.mashb1t.de
@@ -20,6 +20,7 @@ services:
       - LETSENCRYPT_EMAIL=info@mash1t.de
 #    ports:
 #      - "3000:80"
+    network_mode: bridge
 
   php:
     restart: unless-stopped
@@ -32,11 +33,12 @@ services:
     env_file:
       - .env
     volumes:
-#      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+      #      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
       - terms-storage:/var/www/html/storage
     links:
       - db
       - redis
+    network_mode: bridge
 
   db:
     restart: unless-stopped
@@ -47,10 +49,12 @@ services:
       - terms-db:/var/lib/mysql
 #    ports:
 #      - "33006:3306"
+    network_mode: bridge
 
   redis:
     image: redis:6
     restart: always
+    network_mode: bridge
 
 volumes:
   terms-db:
