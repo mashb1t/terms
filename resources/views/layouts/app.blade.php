@@ -30,14 +30,10 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        @env('production')
-            @include('analytics.analytics-head')
-        @endenv
+        @include('analytics.analytics-head')
     </head>
     <body class="font-sans antialiased">
-        @env('production')
-            @include('analytics.analytics-body')
-        @endenv
+        @include('analytics.analytics-body')
         <x-jet-banner />
 
         <div class="min-h-screen bg-gray-100 flex flex-col">

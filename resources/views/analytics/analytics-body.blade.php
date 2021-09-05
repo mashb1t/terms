@@ -1,3 +1,3 @@
-@env('production')
+@production
     @include('analytics.gtm.gtm-body')
-@endenv
+@endproduction
