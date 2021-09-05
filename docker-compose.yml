@@ -10,7 +10,7 @@ services:
     links:
       - php
     volumes:
-      #- ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+      #- ./dockerfiles/php/image-files/var/www/html:/var/www/html
       #      - ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
       #      - ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
       - terms-storage:/var/www/html/storage-nginx
@@ -33,7 +33,7 @@ services:
     env_file:
       - .env
     volumes:
-      #      - ./dockerfiles/php8/image-files/var/www/html:/var/www/html
+      #      - ./dockerfiles/php/image-files/var/www/html:/var/www/html
       - terms-storage:/var/www/html/storage
     links:
       - db
