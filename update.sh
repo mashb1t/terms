@@ -6,7 +6,7 @@ git checkout master
 git pull
 cd ../../../../../
 
-docker-compose build
+docker-compose build --parallel
 docker-compose up -d
 
 docker-compose exec php php artisan migrate --force
