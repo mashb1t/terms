@@ -197,7 +197,7 @@
     </x-jet-dialog-modal>
 
     <form wire:submit.prevent="save">
-        <x-modal.dialog wire:model.defer="showEditModal">
+        <x-modal.dialog wire:model="showEditModal">
             <x-slot name="title"> @if(isset($editing->id))
                     {{ __('Edit') }} @if($editing->title ?? $editing->id ?? false) "{{ $editing->title ?? $editing->id }}"@endif
                 @else
