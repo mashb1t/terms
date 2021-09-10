@@ -40,7 +40,6 @@
 
                     <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
                         {{ __('Do not yet have an account?') }}
-                        {{ env('APP_ENV') }}
                     </a>
                 @endif
 
