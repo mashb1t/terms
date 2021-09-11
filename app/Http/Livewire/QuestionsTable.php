@@ -8,7 +8,6 @@ use App\Models\Quiz;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\NumberColumn;
@@ -35,14 +34,14 @@ class QuestionsTable extends AbstractDataTable
             'editing.slot_id' => 'required|exists:' . Slot::class . ',id',
             'editing.question' => 'required',
             'editing.answer' => 'required_without_all:answerImage,editing.answer_image',
-            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:5120', //5MB
         ];
     }
 
     public function updatedAnswerImage()
     {
         $this->validate([
-            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:5120', //5MB
         ]);
     }
 

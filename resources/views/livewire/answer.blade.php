@@ -28,7 +28,7 @@ use App\Models\Question;
 
             <x-slot name="content">
                 <div id="answer" class="text-sm text-gray-600" style="display: none">
-                    {{ $question->answer }}
+                    {!! nl2br($question->answer) !!}
                     @if($question->answer_image)
                         <img src="{{ Storage::disk('public')->url($question->answer_image) }}">
                     @endif
