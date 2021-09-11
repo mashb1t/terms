@@ -1,0 +1,9 @@
+**/.DS_Store
+.git
+.vagrant
+.idea
+
+node_modules/
+vendor/
+/tests/php-cs-fixer
+/tests/.php_cs.cache
