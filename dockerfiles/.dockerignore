@@ -3,7 +3,5 @@
 .vagrant
 .idea
 
-node_modules/
-vendor/
-/tests/php-cs-fixer
-/tests/.php_cs.cache
+php/var/www/html/node_modules/
+php/var/www/html/vendor/
