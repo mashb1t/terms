@@ -1,10 +1,20 @@
 FROM node:14 as terms-node
 
-COPY php/ /
-
 WORKDIR /var/www/html
 
+COPY php/var/www/html/package.json ./package.json
+COPY php/var/www/html/package-lock.json ./package-lock.json
+
 RUN npm ci
+
+COPY php/var/www/html/webpack.mix.js ./webpack.mix.js
+COPY php/var/www/html/tailwind.config.js ./tailwind.config.js
+COPY php/var/www/html/public/ ./public/
+
+COPY php/var/www/html/resources/js/ ./resources/js/
+COPY php/var/www/html/resources/css/ ./resources/css/
+COPY php/var/www/html/resources/views/ ./resources/views/
+
 RUN npm run production
 
 
@@ -42,12 +52,11 @@ WORKDIR /var/www/html
 # composer
 # ---
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader --no-dev && rm -rf /root/.composer
 
 # node
 # ---
 COPY --from=terms-node /var/www/html/public /var/www/html/public
-COPY --from=terms-node /var/www/html/node_modules /var/www/html/node_modules
 
 # laravel
 # ---
@@ -64,9 +73,9 @@ RUN chown -R www-data:www-data /var/www/html \
 
 FROM nginx:1.21 as terms-nginx
 
-COPY --from=terms-php /var/www/html/public /var/www/html/public
-
 COPY nginx/etc/nginx/ /etc/nginx/
+
+COPY --from=terms-php /var/www/html/public /var/www/html/public
 
 RUN cd /var/www/html/public \
     # clear copied storage symlink
