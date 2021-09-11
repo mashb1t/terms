@@ -20,7 +20,7 @@ RUN npm run production
 
 FROM php:8.0-fpm as terms-php
 
-COPY php/usr/local/bin/docker-image-cleanup /usr/local/bin/docker-image-cleanup
+COPY php/image-files/usr/local/bin/docker-image-cleanup /usr/local/bin/docker-image-cleanup
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
@@ -45,14 +45,21 @@ RUN apt-get update \
     && install-php-extensions bcmath curl gd imagick intl json opcache pdo pdo_mysql redis zip \
     && sh /usr/local/bin/docker-image-cleanup
 
-COPY php/ /
+COPY php/image-files /
 
 WORKDIR /var/www/html
 
 # composer
 # ---
 COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
-RUN composer install --optimize-autoloader --no-dev && rm -rf /root/.composer
+COPY php/var/www/html/composer.* ./
+RUN composer install --prefer-dist --no-scripts --no-autoloader
+
+COPY php/var/www/html/ ./
+
+# Finish composer
+RUN composer dump-autoload --optimize && \
+    composer clear-cache
 
 # node
 # ---
