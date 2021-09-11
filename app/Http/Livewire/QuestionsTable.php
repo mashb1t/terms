@@ -151,10 +151,6 @@ class QuestionsTable extends AbstractDataTable
 
     public function deleteConfirmed()
     {
-        if ($this->editing->answer_image) {
-            Storage::disk('public')->delete($this->editing->answer_image);
-        }
-
         parent::delete($this->editing->id);
 
         $this->editing = null;

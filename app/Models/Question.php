@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Question
@@ -51,6 +52,17 @@ class Question extends Model
     protected $fillable = [
         'answer_image'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function(Question $question) {
+            if ($question->answer_image) {
+                Storage::disk('public')->delete($question->answer_image);
+            }
+        });
+    }
 
     public function answerQuestion(bool $correct, bool $skipped = false): void
     {
