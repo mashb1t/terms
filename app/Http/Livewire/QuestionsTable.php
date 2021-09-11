@@ -8,14 +8,21 @@ use App\Models\Quiz;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
+use Livewire\WithFileUploads;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\NumberColumn;
+use Storage;
 
 class QuestionsTable extends AbstractDataTable
 {
+    use WithFileUploads;
+
     public $model = Question::class;
 
     public ?Model $editing;
+
+    public $answerImage;
 
     public bool $showCreateButton = true;
 
@@ -27,8 +34,16 @@ class QuestionsTable extends AbstractDataTable
             'editing.quiz_id' => 'required|exists:' . Quiz::class . ',id',
             'editing.slot_id' => 'required|exists:' . Slot::class . ',id',
             'editing.question' => 'required',
-            'editing.answer' => 'required',
+            'editing.answer' => 'required_without_all:answerImage,editing.answer_image',
+            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
         ];
+    }
+
+    public function updatedAnswerImage()
+    {
+        $this->validate([
+            'answerImage' => 'required_if:editing.answer,null|nullable|image|mimes:jpg,jpeg,png,svg,gif|max:2048',
+        ]);
     }
 
     public function builder()
@@ -65,7 +80,7 @@ class QuestionsTable extends AbstractDataTable
                 CacheHelper::getCachedSlotsCollection()->pluck('id')
             ),
             Column::name('question')->truncate(30)->filterable()->searchable(),
-            Column::name('answer')->truncate(30)->filterable()->searchable(),
+            Column::raw('answer')->truncate(30)->filterable()->searchable(),
 
             Column::callback(['id', 'question'], function ($id, $name) {
                 return view('datatables.table-actions', [
@@ -81,16 +96,6 @@ class QuestionsTable extends AbstractDataTable
         ];
     }
 
-    public function save()
-    {
-        $validatedData = $this->validate();
-        $this->editing->offsetUnset('slot_id');
-        $this->editing->save();
-
-        $this->editing->slot()->sync([$validatedData['editing']['slot_id']]);
-        $this->showEditModal = false;
-    }
-
     public function edit(?int $id = null, ?int $quizId = null)
     {
         $this->editing = Question::findOrNew($id);
@@ -103,7 +108,53 @@ class QuestionsTable extends AbstractDataTable
         $this->editing->slot_id = $this->editing->slot()->first()->id
             ?? CacheHelper::getCachedSlotsCollection()->first()->id
             ?? null;
+
+        $this->answerImage = null;
+
         $this->showEditModal = true;
+    }
+
+    public function save()
+    {
+        $validatedData = $this->validate();
+
+        if (!empty($validatedData['answerImage'])) {
+            if ($this->editing->answer_image) {
+                Storage::disk('public')->delete($this->editing->answer_image);
+            }
+
+            $this->editing->answer_image = $this->answerImage->store('answerImages', 'public');
+        }
+
+        $this->editing->offsetUnset('slot_id');
+        $this->editing->save();
+
+        $this->editing->slot()->sync([$validatedData['editing']['slot_id']]);
+        $this->showEditModal = false;
+    }
+
+    public function deleteImage()
+    {
+        if ($this->editing->answer_image) {
+            Storage::disk('public')->delete($this->editing->answer_image);
+
+            $slotId = $this->editing->offsetGet('slot_id');
+            $this->editing->offsetUnset('slot_id');
+
+            $this->editing->update(['answer_image' => null]);
+
+            $this->editing->offsetSet('slot_id', $slotId);
+        }
+
+        $this->answerImage = null;
+    }
+
+    public function deleteConfirmed()
+    {
+        parent::delete($this->editing->id);
+
+        $this->editing = null;
+        $this->showDeleteModal = false;
     }
 
     public function render()

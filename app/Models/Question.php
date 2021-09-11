@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Question
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property int $quiz_id
  * @property string $question
  * @property string $answer
+ * @property string $answer_image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Answer[] $answers
@@ -35,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Question myUnansweredOrDueQuestions()
  * @method static Builder|Question unansweredOrDueQuestions()
  * @method static Builder|Question whereAnswer($value)
+ * @method static Builder|Question whereAnswerImage($value)
  * @method static Builder|Question whereCreatedAt($value)
  * @method static Builder|Question whereId($value)
  * @method static Builder|Question whereQuestion($value)
@@ -45,6 +48,21 @@ use Illuminate\Support\Carbon;
 class Question extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'answer_image'
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function(Question $question) {
+            if ($question->answer_image) {
+                Storage::disk('public')->delete($question->answer_image);
+            }
+        });
+    }
 
     public function answerQuestion(bool $correct, bool $skipped = false): void
     {

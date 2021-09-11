@@ -1,3 +1,12 @@
+<?php
+
+use App\Models\Question;
+
+/**
+ * @var $question Question
+ */
+?>
+
 <div>
     @if(!$question)
         {{ __('Nothing to do!') }}
@@ -18,8 +27,11 @@
             </x-slot>
 
             <x-slot name="content">
-                <div id="answer" class="max-w-xl text-sm text-gray-600" style="display: none">
+                <div id="answer" class="text-sm text-gray-600" style="display: none">
                     {{ $question->answer }}
+                    @if($question->answer_image)
+                        <img src="{{ Storage::disk('public')->url($question->answer_image) }}">
+                    @endif
                 </div>
 
                 <div class="mt-5">

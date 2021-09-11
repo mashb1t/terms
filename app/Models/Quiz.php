@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Quiz
@@ -38,6 +39,15 @@ use Illuminate\Support\Carbon;
 class Quiz extends Model
 {
     use HasFactory;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function(Quiz $quiz) {
+            $quiz->questions()->get()->each->delete();
+        });
+    }
 
     public function owner(): BelongsTo
     {
