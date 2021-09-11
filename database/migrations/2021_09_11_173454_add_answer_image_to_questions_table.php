@@ -15,7 +15,7 @@ class AddAnswerImageToQuestionsTable extends Migration
     {
         Schema::table('questions', function (Blueprint $table) {
             $table->string('answer_image')->after('answer')->nullable();
-            $table->text('answer')->change()->nullable();
+            $table->text('answer')->nullable()->change();
         });
     }
 
@@ -28,7 +28,7 @@ class AddAnswerImageToQuestionsTable extends Migration
     {
         Schema::table('questions', function (Blueprint $table) {
             $table->dropColumn('answer_image');
-            $table->text('answer')->change();
+            $table->text('answer')->nullable(false)->change();
         });
     }
 }
