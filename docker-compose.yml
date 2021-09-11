@@ -11,8 +11,6 @@ services:
       - php
     volumes:
       #- ./dockerfiles/php/image-files/var/www/html:/var/www/html
-      #- ./config/terms.mashb1t.de/nginx.conf:/etc/nginx/nginx.conf
-      #- ./config/terms.mashb1t.de/domains:/etc/nginx/conf.d
       - ./volumes/storage/app:/var/www/html/storage-nginx/app
     environment:
       - VIRTUAL_HOST=terms.mashb1t.de

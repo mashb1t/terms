@@ -6,6 +6,7 @@ set -e
 
 # pull latest version of stacks repository itself
 git pull
+git checkout master
 
 # pull latest version of website repository
 cd ./dockerfiles/php/var/www/html
