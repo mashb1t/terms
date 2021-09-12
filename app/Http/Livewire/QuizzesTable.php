@@ -4,13 +4,16 @@ namespace App\Http\Livewire;
 
 use App\Models\Quiz;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class QuizzesTable extends AbstractDataTable
 {
     public $model = Quiz::class;
+
     public ?Model $editing;
+
     public bool $showCreateButton = true;
 
     public function rules()
@@ -57,6 +60,12 @@ class QuizzesTable extends AbstractDataTable
 
     public function save()
     {
+        if ($this->editing->exists) {
+            Gate::authorize('update', $this->editing);
+        } else {
+            Gate::authorize('create', $this->model);
+        }
+
         $this->validate();
         $this->editing->owner = $this->editing->owner ?? auth()->id();
         $this->editing->save();
@@ -65,6 +74,8 @@ class QuizzesTable extends AbstractDataTable
 
     public function render()
     {
+        Gate::authorize('viewAny', $this->model);
+
         $this->emit('refreshDynamic');
 
         return view('datatables::datatable', [

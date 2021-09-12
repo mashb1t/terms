@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 use Livewire\WithFileUploads;
 use Mediconesystems\LivewireDatatables\Column;
@@ -104,6 +105,14 @@ class QuestionsTable extends AbstractDataTable
             ?? CacheHelper::getCachedQuizzesCollection()->first()->id
             ?? null;
 
+        if ($this->editing->exists) {
+            Gate::authorize('update', $this->editing);
+        } else {
+            // check if user owns referring quiz
+            Gate::authorize('changeQuizId', $this->editing);
+            Gate::authorize('create', $this->model);
+        }
+
         $this->editing->slot_id = $this->editing->slot()->first()->id
             ?? CacheHelper::getCachedSlotsCollection()->first()->id
             ?? null;
@@ -115,6 +124,14 @@ class QuestionsTable extends AbstractDataTable
 
     public function save()
     {
+        Gate::authorize('changeQuizId', $this->editing);
+
+        if ($this->editing->exists) {
+            Gate::authorize('update', $this->editing);
+        } else {
+            Gate::authorize('create', $this->model);
+        }
+
         $validatedData = $this->validate();
 
         if (!empty($validatedData['answerImage'])) {
@@ -134,6 +151,8 @@ class QuestionsTable extends AbstractDataTable
 
     public function deleteImage()
     {
+        Gate::authorize('delete', $this->editing);
+
         if ($this->editing->answer_image) {
             Storage::disk('public')->delete($this->editing->answer_image);
 
@@ -150,6 +169,8 @@ class QuestionsTable extends AbstractDataTable
 
     public function deleteConfirmed()
     {
+        Gate::authorize('delete', $this->editing);
+
         parent::delete($this->editing->id);
 
         $this->editing = null;
@@ -158,6 +179,8 @@ class QuestionsTable extends AbstractDataTable
 
     public function render()
     {
+        Gate::authorize('viewAny', $this->model);
+
         $this->emit('refreshDynamic');
 
         return view('datatables::datatable', [
