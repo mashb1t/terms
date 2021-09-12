@@ -20,12 +20,6 @@ class Answer extends Component
         return view('livewire.answer');
     }
 
-    public function answer(bool $correct, bool $skipped = false)
-    {
-        $this->question->answerQuestion($correct, $skipped);
-        $this->question = $this->getNextQuestion();
-    }
-
     protected function getNextQuestion(): Model|null
     {
         $query = $this->unansweredOrDueQuestions();
@@ -43,5 +37,11 @@ class Answer extends Component
             ->with(['quiz', 'slot'])
             ->myUnansweredOrDueQuestions()
             ->orderBy('question_slot.updated_at');
+    }
+
+    public function answer(bool $correct, bool $skipped = false)
+    {
+        $this->question->answerQuestion($correct, $skipped);
+        $this->question = $this->getNextQuestion();
     }
 }

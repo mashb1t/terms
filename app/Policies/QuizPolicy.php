@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
 class QuizPolicy
 {
@@ -16,9 +15,9 @@ class QuizPolicy
      *
      * @param User $user
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user): bool
     {
         return true;
     }
@@ -29,9 +28,9 @@ class QuizPolicy
      * @param User $user
      * @param Quiz $quiz
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function view(User $user, Quiz $quiz)
+    public function view(User $user, Quiz $quiz): bool
     {
         return $user->id === $quiz->owner;
     }
@@ -41,9 +40,9 @@ class QuizPolicy
      *
      * @param User $user
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return true;
     }
@@ -54,9 +53,9 @@ class QuizPolicy
      * @param User $user
      * @param Quiz $quiz
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function update(User $user, Quiz $quiz)
+    public function update(User $user, Quiz $quiz): bool
     {
         return $user->id === $quiz->owner;
     }
@@ -67,9 +66,9 @@ class QuizPolicy
      * @param User $user
      * @param Quiz $quiz
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function delete(User $user, Quiz $quiz)
+    public function delete(User $user, Quiz $quiz): bool
     {
         return $user->id === $quiz->owner;
     }
@@ -80,9 +79,9 @@ class QuizPolicy
      * @param User $user
      * @param Quiz $quiz
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function restore(User $user, Quiz $quiz)
+    public function restore(User $user, Quiz $quiz): bool
     {
         return $user->id === $quiz->owner;
     }
@@ -93,9 +92,9 @@ class QuizPolicy
      * @param User $user
      * @param Quiz $quiz
      *
-     * @return Response|bool
+     * @return bool
      */
-    public function forceDelete(User $user, Quiz $quiz)
+    public function forceDelete(User $user, Quiz $quiz): bool
     {
         return $user->id === $quiz->owner;
     }

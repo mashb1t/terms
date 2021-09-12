@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::group(['prefix' => 'quiz/{quiz}'], function () {
         Route::get('/', function (Quiz $quiz) {
+            Gate::authorize('view', $quiz);
+
             return view('quizzes/view', [
                 'quiz' => $quiz,
             ]);
