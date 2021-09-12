@@ -19,8 +19,8 @@ class QuizzesTable extends AbstractDataTable
     public function rules()
     {
         return [
-            'editing.title' => 'required|min:3',
-            'editing.description' => 'required|min:3',
+            'editing.title' => 'required',
+            'editing.description' => 'nullable',
         ];
     }
 
