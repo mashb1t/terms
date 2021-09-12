@@ -1,4 +1,4 @@
-FROM node:14 as terms-node
+FROM node:16 as terms-node
 
 WORKDIR /var/www/html
 
