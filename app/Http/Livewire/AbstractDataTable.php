@@ -68,9 +68,9 @@ class AbstractDataTable extends LivewireDatatable
      */
     public function confirmDelete($id)
     {
-        Gate::authorize('delete', $this->editing);
-
         $this->editing = $this->model::findOrFail($id);
+
+        Gate::authorize('delete', $this->editing);
 
         $this->showDeleteModal = true;
     }
