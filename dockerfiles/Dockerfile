@@ -51,7 +51,7 @@ WORKDIR /var/www/html
 
 # composer
 # ---
-COPY --from=composer:2.0 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.1 /usr/bin/composer /usr/local/bin/composer
 COPY php/var/www/html/composer.* ./
 RUN composer install --prefer-dist --no-scripts --no-autoloader
 
