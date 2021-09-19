@@ -40,6 +40,11 @@
         x-on:livewire-upload-error="isUploading = false"
         x-on:livewire-upload-progress="progress = $event.detail.progress"
     >
+        <!-- Progress Bar -->
+        <div x-show="isUploading" class="mb-5">
+            <progress max="100" x-bind:value="progress"></progress>
+        </div>
+
         <div class="inline-flex items-center justify-center">
             <x-input.file-upload wire:model="answerImage" id="answerImage" />
             @if (isset($showDeleteButton))
@@ -47,11 +52,6 @@
                     {{ __('Delete') }}
                 </x-jet-danger-button>
             @endif
-        </div>
-
-        <!-- Progress Bar -->
-        <div x-show="isUploading">
-            <progress max="100" x-bind:value="progress"></progress>
         </div>
     </div>
 
