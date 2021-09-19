@@ -1,10 +1,12 @@
-<x-input.group for="quiz_id" label="Quiz ID" :error="$errors->first('editing.quiz_id')">
-    <x-input.select wire:model.defer="editing.quiz_id" id="quiz_id" placeholder="Quiz ID">
-        @foreach($quizzes as $quiz)
-            <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
-        @endforeach
-    </x-input.select>
-</x-input.group>
+@if (count($quizzes) > 1)
+    <x-input.group for="quiz_id" label="Quiz ID" :error="$errors->first('editing.quiz_id')">
+        <x-input.select wire:model.defer="editing.quiz_id" id="quiz_id" placeholder="Quiz ID">
+            @foreach($quizzes as $quiz)
+                <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
+            @endforeach
+        </x-input.select>
+    </x-input.group>
+@endif
 
 <x-input.group for="slot_id" label="Slot ID" :error="$errors->first('editing.slot_id')">
     <x-input.select wire:model.defer="editing.slot_id" id="slot_id" placeholder="Slot ID">
@@ -15,11 +17,11 @@
 </x-input.group>
 
 <x-input.group for="question" label="Question" :error="$errors->first('editing.question')">
-    <x-input.textarea wire:model.defer="editing.question" id="title" placeholder="Question" rows="3" />
+    <x-input.textarea wire:model.defer="editing.question" id="title" placeholder="Question" rows="2" />
 </x-input.group>
 
 <x-input.group for="answer" label="Answer" :error="$errors->first('editing.answer')">
-    <x-input.textarea wire:model.defer="editing.answer" id="answer" placeholder="Answer" rows="5" />
+    <x-input.textarea wire:model.defer="editing.answer" id="answer" placeholder="Answer" rows="3" />
 </x-input.group>
 
 <x-input.group for="answerImage" label="Answer Image" :error="$errors->first('answerImage')">
@@ -38,6 +40,11 @@
         x-on:livewire-upload-error="isUploading = false"
         x-on:livewire-upload-progress="progress = $event.detail.progress"
     >
+        <!-- Progress Bar -->
+        <div x-show="isUploading" class="mb-5">
+            <progress max="100" x-bind:value="progress"></progress>
+        </div>
+
         <div class="inline-flex items-center justify-center">
             <x-input.file-upload wire:model="answerImage" id="answerImage" />
             @if (isset($showDeleteButton))
@@ -45,11 +52,6 @@
                     {{ __('Delete') }}
                 </x-jet-danger-button>
             @endif
-        </div>
-
-        <!-- Progress Bar -->
-        <div x-show="isUploading">
-            <progress max="100" x-bind:value="progress"></progress>
         </div>
     </div>
 
