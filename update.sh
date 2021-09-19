@@ -21,4 +21,8 @@ docker-compose up -d
 
 docker-compose exec php php artisan migrate --force
 docker-compose exec php php artisan opcache:clear
+docker-compose exec php php artisan config:cache
+docker-compose exec php php artisan event:cache
+docker-compose exec php php artisan route:cache
+docker-compose exec php php artisan view:cache
 docker-compose exec php php artisan opcache:compile
