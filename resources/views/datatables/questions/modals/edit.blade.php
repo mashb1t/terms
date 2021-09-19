@@ -17,11 +17,11 @@
 </x-input.group>
 
 <x-input.group for="question" label="Question" :error="$errors->first('editing.question')">
-    <x-input.textarea wire:model.defer="editing.question" id="title" placeholder="Question" rows="3" />
+    <x-input.textarea wire:model.defer="editing.question" id="title" placeholder="Question" rows="2" />
 </x-input.group>
 
 <x-input.group for="answer" label="Answer" :error="$errors->first('editing.answer')">
-    <x-input.textarea wire:model.defer="editing.answer" id="answer" placeholder="Answer" rows="5" />
+    <x-input.textarea wire:model.defer="editing.answer" id="answer" placeholder="Answer" rows="3" />
 </x-input.group>
 
 <x-input.group for="answerImage" label="Answer Image" :error="$errors->first('answerImage')">
