@@ -1,10 +1,12 @@
-<x-input.group for="quiz_id" label="Quiz ID" :error="$errors->first('editing.quiz_id')">
-    <x-input.select wire:model.defer="editing.quiz_id" id="quiz_id" placeholder="Quiz ID">
-        @foreach($quizzes as $quiz)
-            <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
-        @endforeach
-    </x-input.select>
-</x-input.group>
+@if (count($quizzes) > 1)
+    <x-input.group for="quiz_id" label="Quiz ID" :error="$errors->first('editing.quiz_id')">
+        <x-input.select wire:model.defer="editing.quiz_id" id="quiz_id" placeholder="Quiz ID">
+            @foreach($quizzes as $quiz)
+                <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
+            @endforeach
+        </x-input.select>
+    </x-input.group>
+@endif
 
 <x-input.group for="slot_id" label="Slot ID" :error="$errors->first('editing.slot_id')">
     <x-input.select wire:model.defer="editing.slot_id" id="slot_id" placeholder="Slot ID">
