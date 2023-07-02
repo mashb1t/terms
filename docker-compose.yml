@@ -7,54 +7,68 @@ services:
       context: ./dockerfiles
       target: terms-nginx
     image: terms-nginx
-    links:
+    hostname: mashb1t-terms
+    container_name: mashb1t-terms
+    depends_on:
       - php
     volumes:
       #- ./dockerfiles/php/image-files/var/www/html:/var/www/html
       - ./volumes/storage/app:/var/www/html/storage-nginx/app:ro
+    networks:
+      - nginx_proxy
+      - terms
     environment:
       - VIRTUAL_HOST=terms.mashb1t.de
       - LETSENCRYPT_HOST=terms.mashb1t.de
       - LETSENCRYPT_EMAIL=info@mash1t.de
 #    ports:
 #      - "3000:80"
-    network_mode: bridge
 
   php:
     restart: unless-stopped
+    container_name: terms-php
     build:
       dockerfile: Dockerfile
       context: ./dockerfiles
       target: terms-php
     image: terms-php
     command: php-fpm
+    networks:
+      - terms
     env_file:
       - .env
     volumes:
       #- ./dockerfiles/php/image-files/var/www/html:/var/www/html
       - ./volumes/storage/app:/var/www/html/storage/app:delegated
-    links:
+    depends_on:
       - db
       - redis
-    network_mode: bridge
 
   db:
     restart: unless-stopped
     image: mysql:8.0
+    networks:
+      - terms
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - terms-db:/var/lib/mysql
     cap_add:
       - SYS_NICE
-#    ports:
-#      - "33006:3306"
-    network_mode: bridge
+   # ports:
+   #   - "33006:3306"
 
   redis:
-    image: redis:6
-    restart: always
-    network_mode: bridge
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - terms
 
 volumes:
   terms-db:
+
+networks:
+  nginx_proxy:
+    name: nginx_proxy
+    external: true
+  terms:
