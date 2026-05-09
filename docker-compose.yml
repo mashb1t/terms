@@ -23,7 +23,7 @@ services:
       - "traefik.http.routers.terms.tls.certresolver=letsencrypt"
       - "traefik.http.services.terms.loadbalancer.server.port=80"
       - "traefik.http.routers.terms.middlewares=cloudflare-ips@file"
-      - 'kuma.__web="https://terms.mashb1t.de", "others"'
+      - 'kuma.__web="https://terms.mashb1t.de", "websites"'
 #    ports:
 #      - "3000:80"
 
