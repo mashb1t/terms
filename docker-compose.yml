@@ -15,12 +15,16 @@ services:
       #- ./dockerfiles/php/image-files/var/www/html:/var/www/html
       - ./volumes/storage/app:/var/www/html/storage-nginx/app:ro
     networks:
-      - nginx_proxy
+      - proxy
       - terms
-    environment:
-      - VIRTUAL_HOST=terms.mashb1t.de
-      - LETSENCRYPT_HOST=terms.mashb1t.de
-      - LETSENCRYPT_EMAIL=info@mash1t.de
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.terms.rule=Host(`terms.mashb1t.de`)"
+      - "traefik.http.routers.terms.entrypoints=websecure"
+      - "traefik.http.routers.terms.tls.certresolver=letsencrypt"
+      - "traefik.http.services.terms.loadbalancer.server.port=80"
+      - "traefik.http.routers.terms.middlewares=cloudflare-ips@file"
+      - 'kuma.__web="https://terms.mashb1t.de", "others"'
 #    ports:
 #      - "3000:80"
 
@@ -68,7 +72,7 @@ volumes:
   terms-db:
 
 networks:
-  nginx_proxy:
-    name: nginx_proxy
+  proxy:
+    name: proxy
     external: true
   terms:
