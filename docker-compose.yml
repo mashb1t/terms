@@ -16,6 +16,12 @@ services:
     networks:
       - proxy
       - terms
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.terms.rule=Host(`terms.mashb1t.de`)"
@@ -46,6 +52,12 @@ services:
     depends_on:
       - db
       - redis
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f php-fpm > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   db:
     restart: unless-stopped
@@ -60,12 +72,24 @@ services:
       - SYS_NICE
    # ports:
    #   - "33006:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     networks:
       - terms
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   terms-db:
