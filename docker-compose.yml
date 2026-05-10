@@ -53,7 +53,7 @@ services:
       - db
       - redis
     healthcheck:
-      test: ["CMD-SHELL", "pgrep -f php-fpm > /dev/null || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost > /dev/null || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
