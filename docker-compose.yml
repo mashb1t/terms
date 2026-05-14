@@ -30,6 +30,8 @@ services:
       - "traefik.http.services.terms.loadbalancer.server.port=80"
       - "traefik.http.routers.terms.middlewares=cloudflare-ips@file"
       - 'kuma.__web="https://terms.mashb1t.de", "websites"'
+      # Backups (bind: storage/app)
+      - "backup.enable=true"
 #    ports:
 #      - "3000:80"
 
@@ -78,6 +80,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    labels:
+      # Backups: file-level only (Oracle MySQL — script uses mariadb-dump)
+      - "backup.enable=true"
 
   redis:
     image: redis:7-alpine
